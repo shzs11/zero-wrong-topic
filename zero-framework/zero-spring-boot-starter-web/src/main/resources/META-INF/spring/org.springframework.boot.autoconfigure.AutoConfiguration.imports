@@ -1,0 +1,6 @@
+edu.gdpu.zero.framework.apilog.config.ZeroApiLogAutoConfiguration
+edu.gdpu.zero.framework.jackson.config.ZeroJacksonAutoConfiguration
+com.github.xiaoymin.knife4j.spring.configuration.Knife4jAutoConfiguration
+edu.gdpu.zero.framework.swagger.config.ZeroSwaggerAutoConfiguration
+edu.gdpu.zero.framework.web.config.ZeroWebAutoConfiguration
+edu.gdpu.zero.framework.xss.config.ZeroXssAutoConfiguration

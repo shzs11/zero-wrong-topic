@@ -1,0 +1,2 @@
+edu.gdpu.zero.framework.datasource.config.ZeroDataSourceAutoConfiguration
+edu.gdpu.zero.framework.mybatis.config.ZeroMybatisAutoConfiguration

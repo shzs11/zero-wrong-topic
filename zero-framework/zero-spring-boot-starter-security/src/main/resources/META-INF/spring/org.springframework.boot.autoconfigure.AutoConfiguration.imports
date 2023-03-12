@@ -1,0 +1,2 @@
+edu.gdpu.zero.framework.security.config.ZeroSecurityAutoConfiguration
+edu.gdpu.zero.framework.security.config.ZeroWebSecurityConfigurerAdapter

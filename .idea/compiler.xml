@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="zero-sso-demo-by-password" />
+        <module name="zero-sso-demo-by-code" />
+      </profile>
+      <profile name="Annotation profile for zero" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/springframework/boot/spring-boot-configuration-processor/2.7.8/spring-boot-configuration-processor-2.7.8.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.3.Final/mapstruct-processor-1.5.3.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.3.Final/mapstruct-1.5.3.Final.jar" />
+        </processorPath>
+        <module name="zero-spring-boot-starter-monitor" />
+        <module name="zero-spring-boot-starter-biz-tenant" />
+        <module name="zero-server" />
+        <module name="zero-module-system-api" />
+        <module name="zero-module-topic-api" />
+        <module name="zero-module-system-biz" />
+        <module name="zero-spring-boot-starter-excel" />
+        <module name="zero-spring-boot-starter-security" />
+        <module name="zero-spring-boot-starter-biz-error-code" />
+        <module name="zero-module-infra-api" />
+        <module name="zero-spring-boot-starter-mybatis" />
+        <module name="zero-spring-boot-starter-protection" />
+        <module name="zero-spring-boot-starter-websocket" />
+        <module name="zero-spring-boot-starter-test" />
+        <module name="zero-spring-boot-starter-flowable" />
+        <module name="zero-module-member-api" />
+        <module name="zero-spring-boot-starter-job" />
+        <module name="zero-spring-boot-starter-biz-weixin" />
+        <module name="zero-spring-boot-starter-biz-social" />
+        <module name="zero-spring-boot-starter-captcha" />
+        <module name="zero-module-member-biz" />
+        <module name="zero-spring-boot-starter-biz-operatelog" />
+        <module name="zero-spring-boot-starter-biz-ip" />
+        <module name="zero-spring-boot-starter-banner" />
+        <module name="zero-spring-boot-starter-desensitize" />
+        <module name="zero-spring-boot-starter-biz-sms" />
+        <module name="zero-spring-boot-starter-redis" />
+        <module name="zero-module-infra-biz" />
+        <module name="zero-module-topic-biz" />
+        <module name="zero-spring-boot-starter-biz-data-permission" />
+        <module name="zero-spring-boot-starter-web" />
+        <module name="zero-spring-boot-starter-biz-dict" />
+        <module name="zero-common" />
+        <module name="zero-spring-boot-starter-biz-pay" />
+        <module name="zero-spring-boot-starter-file" />
+        <module name="zero-spring-boot-starter-mq" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

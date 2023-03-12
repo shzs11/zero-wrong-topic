@@ -1,0 +1,2 @@
+edu.gdpu.zero.framework.idempotent.config.ZeroIdempotentConfiguration
+edu.gdpu.zero.framework.lock4j.config.ZeroLock4jConfiguration

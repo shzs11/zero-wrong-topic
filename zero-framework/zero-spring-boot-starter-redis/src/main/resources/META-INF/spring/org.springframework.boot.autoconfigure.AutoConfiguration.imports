@@ -1,0 +1,2 @@
+edu.gdpu.zero.framework.redis.config.ZeroRedisAutoConfiguration
+edu.gdpu.zero.framework.redis.config.ZeroCacheAutoConfiguration

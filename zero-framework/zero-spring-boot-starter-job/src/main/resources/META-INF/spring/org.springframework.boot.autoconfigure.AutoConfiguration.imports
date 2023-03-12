@@ -1,0 +1,2 @@
+edu.gdpu.zero.framework.quartz.config.ZeroQuartzAutoConfiguration
+edu.gdpu.zero.framework.quartz.config.ZeroAsyncAutoConfiguration
