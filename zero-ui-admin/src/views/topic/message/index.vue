@@ -3,14 +3,11 @@
 
     <!-- 搜索工作栏 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="错题号" prop="id">
-        <el-input v-model="queryParams.id" placeholder="请输入错题号" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="错题题目" prop="name">
+        <el-input v-model="queryParams.name" placeholder="请输入错题题目" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="用户id" prop="userId">
         <el-input v-model="queryParams.userId" placeholder="请输入用户id" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="用户账号" prop="userName">
-        <el-input v-model="queryParams.userName" placeholder="请输入用户账号" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="错题所有标签" prop="tags">
         <el-input v-model="queryParams.tags" placeholder="请输入错题所有标签" clearable @keyup.enter.native="handleQuery"/>
@@ -18,21 +15,14 @@
       <el-form-item label="科目编号" prop="subjectId">
         <el-input v-model="queryParams.subjectId" placeholder="请输入科目编号" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="部门编号" prop="deptId">
-        <el-input v-model="queryParams.deptId" placeholder="请输入部门编号" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="是否公开" prop="isPublic">
+        <el-select v-model="queryParams.isPublic" placeholder="请选择是否公开" clearable size="small">
+          <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_PUBLIC)"
+                       :key="dict.value" :label="dict.label" :value="dict.value"/>
+        </el-select>
       </el-form-item>
-      <el-form-item label="是否发布" prop="isPublic">
-        <el-input v-model="queryParams.isPublic" placeholder="请输入是否发布" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="创建者" prop="creator">
-        <el-input v-model="queryParams.creator" placeholder="请输入创建者" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createDate">
-        <el-date-picker v-model="queryParams.createDate" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
-                        range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']" />
-      </el-form-item>
-      <el-form-item label="修改时间" prop="updateDate">
-        <el-date-picker v-model="queryParams.updateDate" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
+      <el-form-item label="创建时间" prop="createTime">
+        <el-date-picker v-model="queryParams.createTime" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
                         range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']" />
       </el-form-item>
       <el-form-item>
@@ -58,22 +48,11 @@
     <el-table v-loading="loading" :data="list">
       <el-table-column label="错题号" align="center" prop="id" />
       <el-table-column label="错题题目" align="center" prop="name" />
-      <el-table-column label="题目描述" align="center" prop="description" />
-      <el-table-column label="错题原答案" align="center" prop="originalAnswer" />
-      <el-table-column label="错题正确答案" align="center" prop="correctAnswer" />
-      <el-table-column label="用户账号" align="center" prop="userName" />
-      <el-table-column label="错题所有标签" align="center" prop="tags" />
+      <el-table-column label="用户id" align="center" prop="userId" />
       <el-table-column label="科目编号" align="center" prop="subjectId" />
-      <el-table-column label="部门编号" align="center" prop="deptId" />
-      <el-table-column label="是否发布" align="center" prop="isPublic" />
-      <el-table-column label="创建时间" align="center" prop="createDate" width="180">
+      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template v-slot="scope">
-          <span>{{ parseTime(scope.row.createDate) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="修改时间" align="center" prop="updateDate" width="180">
-        <template v-slot="scope">
-          <span>{{ parseTime(scope.row.updateDate) }}</span>
+          <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -92,17 +71,20 @@
     <!-- 对话框(添加 / 修改) -->
     <el-dialog :title="title" :visible.sync="open" width="500px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="错题题目">
-          <editor v-model="form.name" :min-height="192"/>
+        <el-form-item label="错题题目" prop="name">
+          <el-input v-model="form.name" placeholder="请输入错题题目" />
         </el-form-item>
         <el-form-item label="题目描述">
           <editor v-model="form.description" :min-height="192"/>
         </el-form-item>
-        <el-form-item label="错题原答案">
+        <el-form-item label="错题错误答案">
           <editor v-model="form.originalAnswer" :min-height="192"/>
         </el-form-item>
         <el-form-item label="错题正确答案">
           <editor v-model="form.correctAnswer" :min-height="192"/>
+        </el-form-item>
+        <el-form-item label="用户id" prop="userId">
+          <el-input v-model="form.userId" placeholder="请输入用户id" />
         </el-form-item>
         <el-form-item label="错题所有标签" prop="tags">
           <el-input v-model="form.tags" placeholder="请输入错题所有标签" />
@@ -110,8 +92,11 @@
         <el-form-item label="科目编号" prop="subjectId">
           <el-input v-model="form.subjectId" placeholder="请输入科目编号" />
         </el-form-item>
-        <el-form-item label="是否发布" prop="isPublic">
-          <el-input v-model="form.isPublic" placeholder="请输入是否发布" />
+        <el-form-item label="是否公开" prop="isPublic">
+          <el-select v-model="form.isPublic" placeholder="请选择是否公开">
+            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_PUBLIC)"
+                       :key="dict.value" :label="dict.label" :value="dict.value" />
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -151,16 +136,12 @@ export default {
       queryParams: {
         pageNo: 1,
         pageSize: 10,
-        id: null,
+        name: null,
         userId: null,
-        userName: null,
         tags: null,
         subjectId: null,
-        deptId: null,
         isPublic: null,
-        creator: null,
-        createDate: [],
-        updateDate: [],
+        createTime: [],
       },
       // 表单参数
       form: {},
@@ -168,11 +149,12 @@ export default {
       rules: {
         name: [{ required: true, message: "错题题目不能为空", trigger: "blur" }],
         description: [{ required: true, message: "题目描述不能为空", trigger: "blur" }],
-        originalAnswer: [{ required: true, message: "错题原答案不能为空", trigger: "blur" }],
+        originalAnswer: [{ required: true, message: "错题错误答案不能为空", trigger: "blur" }],
         correctAnswer: [{ required: true, message: "错题正确答案不能为空", trigger: "blur" }],
+        userId: [{ required: true, message: "用户id不能为空", trigger: "blur" }],
         tags: [{ required: true, message: "错题所有标签不能为空", trigger: "blur" }],
         subjectId: [{ required: true, message: "科目编号不能为空", trigger: "blur" }],
-        isPublic: [{ required: true, message: "是否发布不能为空", trigger: "blur" }],
+        isPublic: [{ required: true, message: "是否公开不能为空", trigger: "change" }],
       }
     };
   },
@@ -202,6 +184,7 @@ export default {
         description: undefined,
         originalAnswer: undefined,
         correctAnswer: undefined,
+        userId: undefined,
         tags: undefined,
         subjectId: undefined,
         isPublic: undefined,

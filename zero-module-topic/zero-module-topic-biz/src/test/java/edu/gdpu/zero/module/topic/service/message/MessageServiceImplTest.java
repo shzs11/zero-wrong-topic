@@ -56,7 +56,7 @@ public class MessageServiceImplTest extends BaseDbUnitTest {
         assertPojoEquals(reqVO, message);
     }
 
-    /*@Test
+    @Test
     public void testUpdateMessage_success() {
         // mock 数据
         MessageDO dbMessage = randomPojo(MessageDO.class);
@@ -71,7 +71,7 @@ public class MessageServiceImplTest extends BaseDbUnitTest {
         // 校验是否更新正确
         MessageDO message = messageMapper.selectById(reqVO.getId()); // 获取最新的
         assertPojoEquals(reqVO, message);
-    }*/
+    }
 
     @Test
     public void testUpdateMessage_notExists() {
@@ -110,50 +110,34 @@ public class MessageServiceImplTest extends BaseDbUnitTest {
     public void testGetMessagePage() {
        // mock 数据
        MessageDO dbMessage = randomPojo(MessageDO.class, o -> { // 等会查询到
-           o.setId(null);
+           o.setName(null);
            o.setUserId(null);
-           o.setUserName(null);
            o.setTags(null);
            o.setSubjectId(null);
-           o.setDeptId(null);
            o.setIsPublic(null);
-           o.setCreator(null);
-           o.setCreateDate(null);
-           o.setUpdateDate(null);
+           o.setCreateTime(null);
        });
        messageMapper.insert(dbMessage);
-       // 测试 id 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setId(null)));
+       // 测试 name 不匹配
+       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setName(null)));
        // 测试 userId 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setUserId(null)));
-       // 测试 userName 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setUserName(null)));
        // 测试 tags 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setTags(null)));
        // 测试 subjectId 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setSubjectId(null)));
-       // 测试 deptId 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setDeptId(null)));
        // 测试 isPublic 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setIsPublic(null)));
-       // 测试 creator 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setCreator(null)));
-       // 测试 createDate 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setCreateDate(null)));
-       // 测试 updateDate 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setUpdateDate(null)));
+       // 测试 createTime 不匹配
+       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setCreateTime(null)));
        // 准备参数
        MessagePageReqVO reqVO = new MessagePageReqVO();
-       reqVO.setId(null);
+       reqVO.setName(null);
        reqVO.setUserId(null);
-       reqVO.setUserName(null);
        reqVO.setTags(null);
        reqVO.setSubjectId(null);
-       reqVO.setDeptId(null);
        reqVO.setIsPublic(null);
-       reqVO.setCreator(null);
-       reqVO.setCreateDate(buildBetweenTime(2023, 2, 1, 2023, 2, 28));
-       reqVO.setUpdateDate(buildBetweenTime(2023, 2, 1, 2023, 2, 28));
+       reqVO.setCreateTime(buildBetweenTime(2023, 2, 1, 2023, 2, 28));
 
        // 调用
        PageResult<MessageDO> pageResult = messageService.getMessagePage(reqVO);
@@ -168,50 +152,34 @@ public class MessageServiceImplTest extends BaseDbUnitTest {
     public void testGetMessageList() {
        // mock 数据
        MessageDO dbMessage = randomPojo(MessageDO.class, o -> { // 等会查询到
-           o.setId(null);
+           o.setName(null);
            o.setUserId(null);
-           o.setUserName(null);
            o.setTags(null);
            o.setSubjectId(null);
-           o.setDeptId(null);
            o.setIsPublic(null);
-           o.setCreator(null);
-           o.setCreateDate(null);
-           o.setUpdateDate(null);
+           o.setCreateTime(null);
        });
        messageMapper.insert(dbMessage);
-       // 测试 id 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setId(null)));
+       // 测试 name 不匹配
+       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setName(null)));
        // 测试 userId 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setUserId(null)));
-       // 测试 userName 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setUserName(null)));
        // 测试 tags 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setTags(null)));
        // 测试 subjectId 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setSubjectId(null)));
-       // 测试 deptId 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setDeptId(null)));
        // 测试 isPublic 不匹配
        messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setIsPublic(null)));
-       // 测试 creator 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setCreator(null)));
-       // 测试 createDate 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setCreateDate(null)));
-       // 测试 updateDate 不匹配
-       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setUpdateDate(null)));
+       // 测试 createTime 不匹配
+       messageMapper.insert(cloneIgnoreId(dbMessage, o -> o.setCreateTime(null)));
        // 准备参数
        MessageExportReqVO reqVO = new MessageExportReqVO();
-       reqVO.setId(null);
+       reqVO.setName(null);
        reqVO.setUserId(null);
-       reqVO.setUserName(null);
        reqVO.setTags(null);
        reqVO.setSubjectId(null);
-       reqVO.setDeptId(null);
        reqVO.setIsPublic(null);
-       reqVO.setCreator(null);
-       reqVO.setCreateDate(buildBetweenTime(2023, 2, 1, 2023, 2, 28));
-       reqVO.setUpdateDate(buildBetweenTime(2023, 2, 1, 2023, 2, 28));
+       reqVO.setCreateTime(buildBetweenTime(2023, 2, 1, 2023, 2, 28));
 
        // 调用
        List<MessageDO> list = messageService.getMessageList(reqVO);

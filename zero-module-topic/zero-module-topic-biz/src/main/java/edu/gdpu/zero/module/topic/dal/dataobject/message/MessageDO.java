@@ -36,7 +36,7 @@ public class MessageDO extends BaseDO {
      */
     private String description;
     /**
-     * 错题原答案
+     * 错题错误答案
      */
     private String originalAnswer;
     /**
@@ -48,10 +48,6 @@ public class MessageDO extends BaseDO {
      */
     private Long userId;
     /**
-     * 用户账号
-     */
-    private String userName;
-    /**
      * 错题所有标签
      */
     private String tags;
@@ -60,20 +56,10 @@ public class MessageDO extends BaseDO {
      */
     private Long subjectId;
     /**
-     * 部门编号
-     */
-    private Long deptId;
-    /**
-     * 是否发布
+     * 是否公开
+     *
+     * 枚举 {@link TODO topic_public 对应的类}
      */
     private Byte isPublic;
-    /**
-     * 创建时间
-     */
-    private LocalDateTime createDate;
-    /**
-     * 修改时间
-     */
-    private LocalDateTime updateDate;
 
 }

@@ -19,31 +19,23 @@ public interface MessageMapper extends BaseMapperX<MessageDO> {
 
     default PageResult<MessageDO> selectPage(MessagePageReqVO reqVO) {
         return selectPage(reqVO, new LambdaQueryWrapperX<MessageDO>()
-                .eqIfPresent(MessageDO::getId, reqVO.getId())
+                .likeIfPresent(MessageDO::getName, reqVO.getName())
                 .eqIfPresent(MessageDO::getUserId, reqVO.getUserId())
-                .likeIfPresent(MessageDO::getUserName, reqVO.getUserName())
                 .eqIfPresent(MessageDO::getTags, reqVO.getTags())
                 .eqIfPresent(MessageDO::getSubjectId, reqVO.getSubjectId())
-                .eqIfPresent(MessageDO::getDeptId, reqVO.getDeptId())
                 .eqIfPresent(MessageDO::getIsPublic, reqVO.getIsPublic())
-                .eqIfPresent(MessageDO::getCreator, reqVO.getCreator())
-                .betweenIfPresent(MessageDO::getCreateDate, reqVO.getCreateDate())
-                .betweenIfPresent(MessageDO::getUpdateDate, reqVO.getUpdateDate())
+                .betweenIfPresent(MessageDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(MessageDO::getId));
     }
 
     default List<MessageDO> selectList(MessageExportReqVO reqVO) {
         return selectList(new LambdaQueryWrapperX<MessageDO>()
-                .eqIfPresent(MessageDO::getId, reqVO.getId())
+                .likeIfPresent(MessageDO::getName, reqVO.getName())
                 .eqIfPresent(MessageDO::getUserId, reqVO.getUserId())
-                .likeIfPresent(MessageDO::getUserName, reqVO.getUserName())
                 .eqIfPresent(MessageDO::getTags, reqVO.getTags())
                 .eqIfPresent(MessageDO::getSubjectId, reqVO.getSubjectId())
-                .eqIfPresent(MessageDO::getDeptId, reqVO.getDeptId())
                 .eqIfPresent(MessageDO::getIsPublic, reqVO.getIsPublic())
-                .eqIfPresent(MessageDO::getCreator, reqVO.getCreator())
-                .betweenIfPresent(MessageDO::getCreateDate, reqVO.getCreateDate())
-                .betweenIfPresent(MessageDO::getUpdateDate, reqVO.getUpdateDate())
+                .betweenIfPresent(MessageDO::getCreateTime, reqVO.getCreateTime())
                 .orderByDesc(MessageDO::getId));
     }
 

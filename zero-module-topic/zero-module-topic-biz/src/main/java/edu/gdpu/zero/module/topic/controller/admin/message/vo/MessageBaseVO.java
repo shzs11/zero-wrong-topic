@@ -20,28 +20,12 @@ public class MessageBaseVO {
 
     private Long id;
 
-    @Schema(description = "题目描述", required = true, example = "随便")
-    @NotNull(message = "题目描述不能为空")
-    private String description;
+    @Schema(description = "用户id", required = true, example = "978")
+    @NotNull(message = "用户id不能为空")
+    private Long userId;
 
-    @Schema(description = "错题原答案", required = true)
-    @NotNull(message = "错题原答案不能为空")
-    private String originalAnswer;
-
-    @Schema(description = "错题正确答案", required = true)
-    @NotNull(message = "错题正确答案不能为空")
-    private String correctAnswer;
-
-    @Schema(description = "错题所有标签", required = true)
-    @NotNull(message = "错题所有标签不能为空")
-    private String tags;
-
-    @Schema(description = "科目编号", required = true, example = "22249")
+    @Schema(description = "科目编号", required = true, example = "14257")
     @NotNull(message = "科目编号不能为空")
     private Long subjectId;
-
-    @Schema(description = "是否发布", required = true)
-    @NotNull(message = "是否发布不能为空")
-    private Byte isPublic;
 
 }
