@@ -62,4 +62,7 @@ public class MessageDO extends BaseDO {
      */
     private Byte isPublic;
 
+
+
+
 }

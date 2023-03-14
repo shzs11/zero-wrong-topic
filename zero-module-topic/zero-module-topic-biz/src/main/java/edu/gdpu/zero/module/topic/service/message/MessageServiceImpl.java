@@ -1,8 +1,13 @@
 package edu.gdpu.zero.module.topic.service.message;
 
 import edu.gdpu.zero.module.system.api.user.AdminUserApi;
+import edu.gdpu.zero.module.system.api.user.dto.AdminUserRespDTO;
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectDO;
+import edu.gdpu.zero.module.topic.dal.mysql.subject.SubjectMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import javax.security.auth.Subject;
+
 import org.springframework.validation.annotation.Validated;
 
 import java.util.*;
@@ -31,6 +36,9 @@ public class MessageServiceImpl implements MessageService {
 
     @Resource
     private AdminUserApi userApi;
+
+    @Resource
+    private SubjectMapper subjectMapper;
 
     @Override
     public Long createMessage(MessageCreateReqVO createReqVO) {
@@ -76,10 +84,26 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public PageResult<MessageDO> getMessagePage(MessagePageReqVO pageReqVO) {
+    public PageResult<MessageRespVO> getMessagePage(MessagePageReqVO pageReqVO) {
 
         PageResult<MessageDO> messageDOPageResult = messageMapper.selectPage(pageReqVO);
-        return messageMapper.selectPage(pageReqVO);
+
+        PageResult<MessageRespVO> messageRespVOPageResult = MessageConvert.INSTANCE.convertPage(messageDOPageResult);
+        List<MessageRespVO> list = messageRespVOPageResult.getList();
+        for(int i =0 ;i < list.size();i++){
+            MessageRespVO messageRespVO = list.get(i);
+            //翻译userId
+            AdminUserRespDTO user = userApi.getUser(messageRespVO.getUserId());
+            messageRespVO.setNameOfUser(user.getNickname());
+            //翻译subjectId
+            SubjectDO subjectDO = subjectMapper.selectById(messageRespVO.getSubjectId());
+            messageRespVO.setNameOfSubject(subjectDO.getName());
+            list.set(i,messageRespVO);
+        }
+
+        PageResult<MessageRespVO> result = new PageResult<>(list, messageDOPageResult.getTotal());
+
+        return result;
     }
 
     @Override

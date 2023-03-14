@@ -51,8 +51,8 @@
     <el-table v-loading="loading" :data="list">
       <el-table-column label="错题号" align="center" prop="id" />
       <el-table-column label="错题题目" align="center" prop="name" />
-      <el-table-column label="用户id" align="center" prop="userId" />
-      <el-table-column label="科目编号" align="center" prop="subjectId" />
+      <el-table-column label="用户" align="center" prop="nameOfUser" />
+      <el-table-column label="科目" align="center" prop="nameOfSubject" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template v-slot="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>

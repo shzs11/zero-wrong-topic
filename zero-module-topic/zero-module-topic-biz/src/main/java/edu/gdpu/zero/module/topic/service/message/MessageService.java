@@ -57,7 +57,7 @@ public interface MessageService {
      * @param pageReqVO 分页查询
      * @return 错题分页
      */
-    PageResult<MessageDO> getMessagePage(MessagePageReqVO pageReqVO);
+    PageResult<MessageRespVO> getMessagePage(MessagePageReqVO pageReqVO);
 
     /**
      * 获得错题列表, 用于 Excel 导出

@@ -85,8 +85,10 @@ public class MessageController {
     @Operation(summary = "获得错题分页")
     @PreAuthorize("@ss.hasPermission('topic:message:query')")
     public CommonResult<PageResult<MessageRespVO>> getMessagePage(@Valid MessagePageReqVO pageVO) {
-        PageResult<MessageDO> pageResult = messageService.getMessagePage(pageVO);
-        return success(MessageConvert.INSTANCE.convertPage(pageResult));
+        PageResult<MessageRespVO> pageResult = messageService.getMessagePage(pageVO);
+
+
+        return success(pageResult);
     }
 
     @GetMapping("/export-excel")

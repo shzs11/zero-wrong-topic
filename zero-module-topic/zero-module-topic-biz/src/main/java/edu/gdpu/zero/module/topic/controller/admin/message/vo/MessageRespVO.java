@@ -16,6 +16,14 @@ public class MessageRespVO extends MessageBaseVO {
     @Schema(description = "创建时间", required = true)
     private LocalDateTime createTime;
 
+    private String description;
+
+    private String originalAnswer;
+
+    private String correctAnswer;
+
+    private Byte isPublic;
+
     private String nameOfUser;
 
     private String nameOfSubject;
