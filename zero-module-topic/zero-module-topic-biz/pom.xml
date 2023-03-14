@@ -23,6 +23,17 @@
             <artifactId>zero-module-topic-api</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>edu.gdpu.zero</groupId>
+            <artifactId>zero-spring-boot-starter-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.gdpu.zero</groupId>
+            <artifactId>zero-module-system-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <!-- 业务组件 -->
         <dependency>

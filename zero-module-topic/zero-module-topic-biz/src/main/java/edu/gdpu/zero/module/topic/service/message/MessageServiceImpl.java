@@ -1,5 +1,6 @@
 package edu.gdpu.zero.module.topic.service.message;
 
+import edu.gdpu.zero.module.system.api.user.AdminUserApi;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +14,7 @@ import edu.gdpu.zero.module.topic.convert.message.MessageConvert;
 import edu.gdpu.zero.module.topic.dal.mysql.message.MessageMapper;
 
 import static edu.gdpu.zero.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static edu.gdpu.zero.framework.security.core.util.SecurityFrameworkUtils.getLoginUserId;
 import static edu.gdpu.zero.module.topic.enums.ErrorCodeConstants.*;
 
 /**
@@ -27,10 +29,14 @@ public class MessageServiceImpl implements MessageService {
     @Resource
     private MessageMapper messageMapper;
 
+    @Resource
+    private AdminUserApi userApi;
+
     @Override
     public Long createMessage(MessageCreateReqVO createReqVO) {
         // 插入
         MessageDO message = MessageConvert.INSTANCE.convert(createReqVO);
+        message.setUserId(getLoginUserId());
         messageMapper.insert(message);
         // 返回
         return message.getId();
@@ -71,6 +77,8 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public PageResult<MessageDO> getMessagePage(MessagePageReqVO pageReqVO) {
+
+        PageResult<MessageDO> messageDOPageResult = messageMapper.selectPage(pageReqVO);
         return messageMapper.selectPage(pageReqVO);
     }
 

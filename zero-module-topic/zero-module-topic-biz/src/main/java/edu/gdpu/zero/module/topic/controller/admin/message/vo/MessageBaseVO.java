@@ -21,7 +21,6 @@ public class MessageBaseVO {
     private Long id;
 
     @Schema(description = "用户id", required = true, example = "978")
-    @NotNull(message = "用户id不能为空")
     private Long userId;
 
     @Schema(description = "科目编号", required = true, example = "14257")

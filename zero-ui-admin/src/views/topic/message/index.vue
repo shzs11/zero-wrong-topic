@@ -12,8 +12,11 @@
       <el-form-item label="错题所有标签" prop="tags">
         <el-input v-model="queryParams.tags" placeholder="请输入错题所有标签" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
-      <el-form-item label="科目编号" prop="subjectId">
-        <el-input v-model="queryParams.subjectId" placeholder="请输入科目编号" clearable @keyup.enter.native="handleQuery"/>
+      <el-form-item label="科目" prop="subjectId">
+        <el-select v-model="queryParams.subjectId" placeholder="请输入科目" clearable size="small">
+          <el-option v-for="subject in this.subject"
+                     :key="subject.id" :label="subject.name" :value="subject.id"/>
+        </el-select>
       </el-form-item>
       <el-form-item label="是否公开" prop="isPublic">
         <el-select v-model="queryParams.isPublic" placeholder="请选择是否公开" clearable size="small">
@@ -69,7 +72,7 @@
                 @pagination="getList"/>
 
     <!-- 对话框(添加 / 修改) -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" v-dialogDrag append-to-body>
+    <el-dialog :title="title" :visible.sync="open" width="800px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="错题题目" prop="name">
           <el-input v-model="form.name" placeholder="请输入错题题目" />
@@ -83,16 +86,16 @@
         <el-form-item label="错题正确答案">
           <editor v-model="form.correctAnswer" :min-height="192"/>
         </el-form-item>
-        <el-form-item label="用户id" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入用户id" />
-        </el-form-item>
         <el-form-item label="错题所有标签" prop="tags">
           <el-input v-model="form.tags" placeholder="请输入错题所有标签" />
         </el-form-item>
-        <el-form-item label="科目编号" prop="subjectId">
-          <el-input v-model="form.subjectId" placeholder="请输入科目编号" />
+        <el-form-item label="科目" prop="subjectId">
+          <el-select v-model="form.subjectId" placeholder="请选择科目" clearable size="small">
+            <el-option v-for="subject in this.subject"
+                       :key="subject.id" :label="subject.name" :value="subject.id"/>
+          </el-select>
         </el-form-item>
-        <el-form-item label="是否公开" prop="isPublic">
+        <el-form-item label="是否发布" prop="isPublic">
           <el-select v-model="form.isPublic" placeholder="请选择是否公开">
             <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_PUBLIC)"
                        :key="dict.value" :label="dict.label" :value="dict.value" />
@@ -109,6 +112,7 @@
 
 <script>
 import { createMessage, updateMessage, deleteMessage, getMessage, getMessagePage, exportMessageExcel } from "@/api/topic/message";
+import { createSubject, updateSubject, deleteSubject, getSubject, getSubjectPage, exportSubjectExcel } from "@/api/topic/subject";
 import Editor from '@/components/Editor';
 
 export default {
@@ -143,6 +147,10 @@ export default {
         isPublic: null,
         createTime: [],
       },
+      //科目
+      subject:{
+
+      },
       // 表单参数
       form: {},
       // 表单校验
@@ -151,7 +159,6 @@ export default {
         description: [{ required: true, message: "题目描述不能为空", trigger: "blur" }],
         originalAnswer: [{ required: true, message: "错题错误答案不能为空", trigger: "blur" }],
         correctAnswer: [{ required: true, message: "错题正确答案不能为空", trigger: "blur" }],
-        userId: [{ required: true, message: "用户id不能为空", trigger: "blur" }],
         tags: [{ required: true, message: "错题所有标签不能为空", trigger: "blur" }],
         subjectId: [{ required: true, message: "科目编号不能为空", trigger: "blur" }],
         isPublic: [{ required: true, message: "是否公开不能为空", trigger: "change" }],
@@ -160,6 +167,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getSubject();
   },
   methods: {
     /** 查询列表 */
@@ -171,6 +179,18 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
+    },
+    /**查询科目*/
+    getSubject(){
+      var qeryParams ={
+        page:"1",
+        size:"20",
+      }
+      getSubjectPage(qeryParams).then(response=>{
+        this.subject = response.data.list;
+        console.log(this.subject)
+      })
+
     },
     /** 取消按钮 */
     cancel() {
