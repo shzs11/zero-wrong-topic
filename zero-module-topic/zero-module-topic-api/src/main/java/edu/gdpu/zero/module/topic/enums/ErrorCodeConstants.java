@@ -11,4 +11,7 @@ public interface ErrorCodeConstants {
 
     // ========== 错题 TODO 补充编号 ==========
     ErrorCode MESSAGE_NOT_EXISTS = new ErrorCode(100000002, "错题不存在");
+
+    // ========== 标签 TODO 补充编号 ==========
+    ErrorCode TAG_NOT_EXISTS = new ErrorCode(1000000003, "标签不存在");
 }
