@@ -10,7 +10,10 @@
         <el-input v-model="queryParams.userId" placeholder="请输入用户id" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="错题所有标签" prop="tags">
-        <el-input v-model="queryParams.tags" placeholder="请输入错题所有标签" clearable @keyup.enter.native="handleQuery"/>
+        <el-select v-model="queryParams.tags" placeholder="请选择标签" clearable size="small">
+          <el-option v-for="tag in this.tag"
+                     :key="tag.id" :label="tag.name" :value="tag.id"/>
+        </el-select>
       </el-form-item>
       <el-form-item label="科目" prop="subjectId">
         <el-select v-model="queryParams.subjectId" placeholder="请输入科目" clearable size="small">
@@ -86,8 +89,11 @@
         <el-form-item label="错题正确答案">
           <editor v-model="form.correctAnswer" :min-height="192"/>
         </el-form-item>
-        <el-form-item label="错题所有标签" prop="tags">
-          <el-input v-model="form.tags" placeholder="请输入错题所有标签" />
+        <el-form-item label="标签" prop="tags">
+          <el-select v-model="form.tags" placeholder="请选择标签" clearable size="small">
+            <el-option v-for="tag in this.tag"
+                       :key="tag.id" :label="tag.name" :value="tag.id"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="科目" prop="subjectId">
           <el-select v-model="form.subjectId" placeholder="请选择科目" clearable size="small">
@@ -114,6 +120,7 @@
 import { createMessage, updateMessage, deleteMessage, getMessage, getMessagePage, exportMessageExcel } from "@/api/topic/message";
 import { createSubject, updateSubject, deleteSubject, getSubject, getSubjectPage, exportSubjectExcel } from "@/api/topic/subject";
 import Editor from '@/components/Editor';
+import { createTag, updateTag, deleteTag, getTag, getTagPage, exportTagExcel } from "@/api/topic/tag";
 
 export default {
   name: "Message",
@@ -151,6 +158,7 @@ export default {
       subject:{
 
       },
+      tag:{},
       // 表单参数
       form: {},
       // 表单校验
@@ -168,6 +176,7 @@ export default {
   created() {
     this.getList();
     this.getSubject();
+    this.getTag()
   },
   methods: {
     /** 查询列表 */
@@ -191,6 +200,17 @@ export default {
         console.log(this.subject)
       })
 
+    },
+    /** 查询标签*/
+    getTag(){
+      var qeryParams = {
+        page:"1",
+        size:"20"
+      }
+      getTagPage(qeryParams).then(response=>{
+        this.tag = response.data.list;
+        console.log(this.tag)
+      })
     },
     /** 取消按钮 */
     cancel() {

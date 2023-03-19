@@ -25,7 +25,7 @@
       </el-col>
     </el-row>
 
-    
+
   </div>
 </template>
 
@@ -38,7 +38,7 @@ import BarChart from './dashboard/BarChart'
 
 const lineChartData = {
   newVisitis: {
-    expectedData: [100, 120, 161, 134, 105, 160, 165],
+    expectedData: [200, 120, 161, 134, 105, 160, 165],
     actualData: [120, 82, 91, 154, 162, 140, 145]
   },
   messages: {
@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+        lineChartData: lineChartData.newVisitis
     }
   },
   methods: {

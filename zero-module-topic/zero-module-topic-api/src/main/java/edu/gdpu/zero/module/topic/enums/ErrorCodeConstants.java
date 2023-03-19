@@ -14,4 +14,7 @@ public interface ErrorCodeConstants {
 
     // ========== 标签 TODO 补充编号 ==========
     ErrorCode TAG_NOT_EXISTS = new ErrorCode(1000000003, "标签不存在");
+
+    ErrorCode SELECTION_NOT_EXISTS = new ErrorCode(1000000004, "选择题不存在");
+
 }
