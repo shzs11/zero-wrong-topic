@@ -17,4 +17,7 @@ public interface ErrorCodeConstants {
 
     ErrorCode SELECTION_NOT_EXISTS = new ErrorCode(1000000004, "选择题不存在");
 
+    ErrorCode KNOWLEDGE_NOT_EXISTS = new ErrorCode(1000000005, "知识点不存在");
+
+
 }
