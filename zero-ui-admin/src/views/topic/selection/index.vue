@@ -7,18 +7,25 @@
         <el-input v-model="queryParams.name" placeholder="请输入题目" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="错题标签" prop="tags">
-        <el-select v-model="queryParams.tags" placeholder="请选择错题标签" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+        <el-select v-model="queryParams.tags" placeholder="请选择标签" clearable size="small">
+          <el-option v-for="tag in this.tag"
+                     :key="tag.id" :label="tag.name" :value="tag.id"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="科目编号" prop="subjectId">
-        <el-select v-model="queryParams.subjectId" placeholder="请选择科目编号" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+      <el-form-item label="科目" prop="subjectId">
+        <el-select v-model="queryParams.subjectId" placeholder="请选择科目" clearable size="small"
+                   @change="subjectLevelOneChanged(queryParams.subjectId)">
+          <el-option v-for="subject in this.subjectOne"
+                     :key="subject.id" :label="subject.name" :value="subject.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="知识点" prop="knowledgeId">
-        <el-select v-model="queryParams.knowledgeId" placeholder="请选择知识点" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+        <el-select v-model="queryParams.knowledgeId" placeholder="请选择">
+          <el-option
+            v-for="knowledge in knowledgeTwo"
+            :key="knowledge.id"
+            :label="knowledge.name"
+            :value="knowledge.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="难度" prop="difficulty">
@@ -95,26 +102,40 @@
         </el-form-item>
         <el-form-item label="参考答案" prop="answer">
           <el-radio-group v-model="form.answer">
-            <el-radio label="1">请选择字典生成</el-radio>
+            <el-radio label="1" >选项A</el-radio>
+            <el-radio label="2" >选项B</el-radio>
+            <el-radio label="3" >选项C</el-radio>
+            <el-radio label="4" >选项D</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="错题标签" prop="tags">
-          <el-select v-model="form.tags" placeholder="请选择错题标签">
-            <el-option label="请选择字典生成" value="" />
+        <el-form-item label="标签" prop="tags">
+          <el-select v-model="form.tags" placeholder="请选择标签">
+            <el-option v-for="tag in this.tag"
+                       :key="tag.id" :label="tag.name" :value="tag.id"/>
           </el-select>
         </el-form-item>
-        <el-form-item label="科目编号" prop="subjectId">
-          <el-select v-model="form.subjectId" placeholder="请选择科目编号">
-            <el-option label="请选择字典生成" value="" />
+        <el-form-item label="科目" prop="subjectId">
+          <el-select v-model="form.subjectId" placeholder="请选择科目" clearable size="small"
+                     @change="subjectLevelOneChanged(form.subjectId)">
+            <el-option v-for="subject in this.subjectOne"
+                       :key="subject.id" :label="subject.name" :value="subject.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="知识点" prop="knowledgeId">
-          <el-select v-model="form.knowledgeId" placeholder="请选择知识点">
-            <el-option label="请选择字典生成" value="" />
+          <el-select v-model="form.knowledgeId" placeholder="请选择">
+            <el-option
+              v-for="knowledge in knowledgeTwo"
+              :key="knowledge.id"
+              :label="knowledge.name"
+              :value="knowledge.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="难度" prop="difficulty">
-          <el-input v-model="form.difficulty" placeholder="请输入难度" />
+          <el-radio-group v-model="form.difficulty">
+            <el-radio :label="0">易</el-radio>
+            <el-radio :label="1">中</el-radio>
+            <el-radio :label="2">难</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -127,7 +148,8 @@
 
 <script>
 import { createSelection, updateSelection, deleteSelection, getSelection, getSelectionPage, exportSelectionExcel } from "@/api/topic/selection";
-
+import { createSubject, updateSubject, deleteSubject, getSubject, getSubjectPage, exportSubjectExcel,getSubjectAndKnowledge} from "@/api/topic/subject";
+import { createTag, updateTag, deleteTag, getTag, getTagPage, exportTagExcel } from "@/api/topic/tag";
 export default {
   name: "Selection",
   components: {
@@ -155,12 +177,19 @@ export default {
         name: null,
         tags: null,
         subjectId: null,
-        knowledgeId: null,
+        knowledgeId: undefined,
         difficulty: null,
         createTime: [],
       },
       // 表单参数
       form: {},
+      //科目
+      subject:{},
+      //标签
+      tag:{},
+      //课程和知识点的级联
+      subjectOne:[],
+      knowledgeTwo:{},
       // 表单校验
       rules: {
         name: [{ required: true, message: "题目不能为空", trigger: "blur" }],
@@ -178,6 +207,9 @@ export default {
   },
   created() {
     this.getList();
+    this.getKnowledge();
+    this.getSubject();
+    this.getTag();
   },
   methods: {
     /** 查询列表 */
@@ -189,6 +221,50 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
+    },
+    /** 查询知识点**/
+    getKnowledge(){
+      getSubjectAndKnowledge().then(response=>{
+        this.knowledge = response.data;
+        this.subjectOne = response.data;
+        console.log(this.subjectOne)
+      })
+
+    },
+    /**查询科目*/
+    getSubject(){
+      var qeryParams ={
+        page:"1",
+        size:"20",
+      }
+      getSubjectPage(qeryParams).then(response=>{
+        this.subject = response.data.list;
+        console.log(this.subject)
+      })
+
+    },
+    /** 查询标签*/
+    getTag(){
+      var qeryParams = {
+        page:"1",
+        size:"20"
+      }
+      getTagPage(qeryParams).then(response=>{
+        this.tag = response.data.list;
+        console.log(this.tags)
+      })
+    },
+    subjectLevelOneChanged(value){
+      console.log(value)
+      for(let i = 0; i < this.subjectOne.length;i++){
+        if(this.subjectOne[i].id === value){
+          this.knowledgeTwo = this.subjectOne[i].knowledgeDOList;
+          this.queryParams.knowledgeId = ""
+          this.form.knowledgeId = ""
+        }
+      }
+      console.log(this.knowledgeTwo)
+
     },
     /** 取消按钮 */
     cancel() {
@@ -283,6 +359,11 @@ export default {
           this.$download.excel(response, '选择题.xls');
           this.exportLoading = false;
         }).catch(() => {});
+    },
+    handleChange(value) {
+      console.log(value);
+      this.queryParams.knowledgeId = this.knowledgevalue[1]
+      this.form.knowledgeId = this.knowledgevalue[1]
     }
   }
 };

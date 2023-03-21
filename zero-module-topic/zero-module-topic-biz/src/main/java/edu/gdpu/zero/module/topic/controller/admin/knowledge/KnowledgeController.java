@@ -83,8 +83,8 @@ public class KnowledgeController {
     @Operation(summary = "获得知识点分页")
     @PreAuthorize("@ss.hasPermission('topic:knowledge:query')")
     public CommonResult<PageResult<KnowledgeRespVO>> getKnowledgePage(@Valid KnowledgePageReqVO pageVO) {
-        PageResult<KnowledgeDO> pageResult = knowledgeService.getKnowledgePage(pageVO);
-        return success(KnowledgeConvert.INSTANCE.convertPage(pageResult));
+        PageResult<KnowledgeRespVO> pageResult = knowledgeService.getKnowledgePage2(pageVO);
+        return success(pageResult);
     }
 
     @GetMapping("/export-excel")

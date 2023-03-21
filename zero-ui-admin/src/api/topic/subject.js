@@ -43,6 +43,15 @@ export function getSubjectPage(query) {
   })
 }
 
+// 获得知识点
+export function getSubjectAndKnowledge() {
+  return request({
+    url: '/topic/subject/list/knowledge',
+    method: 'get',
+  })
+}
+
+
 // 导出科目 Excel
 export function exportSubjectExcel(query) {
   return request({

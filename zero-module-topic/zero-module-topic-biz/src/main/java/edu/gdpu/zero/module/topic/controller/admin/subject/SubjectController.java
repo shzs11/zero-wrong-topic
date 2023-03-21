@@ -1,5 +1,6 @@
 package edu.gdpu.zero.module.topic.controller.admin.subject;
 
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectAndKnowledge;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -77,6 +78,14 @@ public class SubjectController {
     public CommonResult<List<SubjectRespVO>> getSubjectList(@RequestParam("ids") Collection<Long> ids) {
         List<SubjectDO> list = subjectService.getSubjectList(ids);
         return success(SubjectConvert.INSTANCE.convertList(list));
+    }
+
+    @GetMapping("/list/knowledge")
+    @Operation(summary = "获得科目和知识点列表")
+    @PreAuthorize("@ss.hasPermission('topic:subject:query')")
+    public CommonResult<List<SubjectAndKnowledge>> getSubjectAndKnowledgeList() {
+        List<SubjectAndKnowledge> subjectAndKnowledge = subjectService.getSubjectAndKnowledge();
+        return success(subjectAndKnowledge);
     }
 
     @GetMapping("/page")

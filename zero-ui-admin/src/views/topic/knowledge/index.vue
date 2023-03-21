@@ -9,7 +9,7 @@
                      :key="subject.id" :label="subject.name" :value="subject.id"/>
         </el-select>
       </el-form-item>
-      <el-form-item label="知识点名称" prop="name">
+      <el-form-item label="知识点" prop="name">
         <el-input v-model="queryParams.name" placeholder="请输入知识点名称" clearable @keyup.enter.native="handleQuery"/>
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
@@ -38,7 +38,7 @@
     <!-- 列表 -->
     <el-table v-loading="loading" :data="list">
       <el-table-column label="知识点编号" align="center" prop="id" />
-      <el-table-column label="科目标识" align="center" prop="subjectId" />
+      <el-table-column label="科目" align="center" prop="nameOfSubject" />
       <el-table-column label="知识点名称" align="center" prop="name" />
       <el-table-column label="描述" align="center" prop="description" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
@@ -62,8 +62,8 @@
     <!-- 对话框(添加 / 修改) -->
     <el-dialog :title="title" :visible.sync="open" width="500px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="科目标识" prop="subjectId">
-          <el-select v-model="form.subjectId" placeholder="请选择科目标识">
+        <el-form-item label="科目" prop="subjectId">
+          <el-select v-model="form.subjectId" placeholder="请选择科目">
             <el-option v-for="subject in this.subject"
                        :key="subject.id" :label="subject.name" :value="subject.id"/>
           </el-select>

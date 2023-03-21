@@ -1,5 +1,7 @@
 package edu.gdpu.zero.module.topic.service.knowledge;
 
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectDO;
+import edu.gdpu.zero.module.topic.dal.mysql.subject.SubjectMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +28,9 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
     @Resource
     private KnowledgeMapper knowledgeMapper;
+
+    @Resource
+    private SubjectMapper subjectMapper;
 
     @Override
     public Long createKnowledge(KnowledgeCreateReqVO createReqVO) {
@@ -71,7 +76,30 @@ public class KnowledgeServiceImpl implements KnowledgeService {
 
     @Override
     public PageResult<KnowledgeDO> getKnowledgePage(KnowledgePageReqVO pageReqVO) {
+
+        PageResult<KnowledgeDO> knowledgeDOPageResult = knowledgeMapper.selectPage(pageReqVO);
+
         return knowledgeMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public PageResult<KnowledgeRespVO> getKnowledgePage2(KnowledgePageReqVO pageReqVO) {
+
+        PageResult<KnowledgeDO> knowledgeDOPageResult = knowledgeMapper.selectPage(pageReqVO);
+
+        PageResult<KnowledgeRespVO> knowledgeDOPage = KnowledgeConvert.INSTANCE.convertPage(knowledgeDOPageResult);
+        List<KnowledgeRespVO> list = knowledgeDOPage.getList();
+        //翻译
+        for(int i = 0;i < list.size();i++){
+            KnowledgeRespVO knowledgeRespVO = list.get(i);
+            //翻译科目id
+            SubjectDO subjectDO = subjectMapper.selectById(knowledgeRespVO.getSubjectId());
+            knowledgeRespVO.setNameOfSubject(subjectDO.getName());
+            list.set(i,knowledgeRespVO);
+        }
+        PageResult<KnowledgeRespVO> result = new PageResult<>(list,knowledgeDOPage.getTotal());
+
+        return result;
     }
 
     @Override

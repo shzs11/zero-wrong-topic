@@ -1,5 +1,10 @@
 package edu.gdpu.zero.module.topic.service.subject;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import edu.gdpu.zero.framework.mybatis.core.query.QueryWrapperX;
+import edu.gdpu.zero.module.topic.dal.dataobject.knowledge.KnowledgeDO;
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectAndKnowledge;
+import edu.gdpu.zero.module.topic.dal.mysql.knowledge.KnowledgeMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +31,9 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Resource
     private SubjectMapper subjectMapper;
+
+    @Resource
+    private KnowledgeMapper knowledgeMapper;
 
     @Override
     public Long createSubject(SubjectCreateReqVO createReqVO) {
@@ -72,6 +80,31 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public PageResult<SubjectDO> getSubjectPage(SubjectPageReqVO pageReqVO) {
         return subjectMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public List<SubjectAndKnowledge> getSubjectAndKnowledge() {
+
+        //获取所有科目信息
+        List<SubjectDO> subjectDOS = subjectMapper.selectList();
+
+        List<SubjectAndKnowledge> result = new ArrayList<>();
+
+        for(int i = 0 ;i < subjectDOS.size();i++){
+            SubjectAndKnowledge subjectAndKnowledge = new SubjectAndKnowledge();
+            subjectAndKnowledge.setId(subjectDOS.get(i).getId());
+            subjectAndKnowledge.setName(subjectDOS.get(i).getName());
+
+            //获取关联知识点信息
+            List<KnowledgeDO> knowledgeDOList = knowledgeMapper.selectList(
+                    new QueryWrapper<KnowledgeDO>().eq("subject_id", subjectDOS.get(i).getId().toString()));
+            subjectAndKnowledge.setKnowledgeDOList(knowledgeDOList);
+
+            result.add(i,subjectAndKnowledge);
+
+        }
+
+        return result;
     }
 
     @Override

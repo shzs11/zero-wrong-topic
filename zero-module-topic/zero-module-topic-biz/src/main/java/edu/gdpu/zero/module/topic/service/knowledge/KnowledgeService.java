@@ -60,6 +60,14 @@ public interface KnowledgeService {
     PageResult<KnowledgeDO> getKnowledgePage(KnowledgePageReqVO pageReqVO);
 
     /**
+     * 获得知识点分页
+     *
+     * @param pageReqVO 分页查询
+     * @return 知识点分页2
+     */
+    PageResult<KnowledgeRespVO> getKnowledgePage2(KnowledgePageReqVO pageReqVO);
+
+    /**
      * 获得知识点列表, 用于 Excel 导出
      *
      * @param exportReqVO 查询条件

@@ -31,6 +31,8 @@ public class SelectionServiceImpl implements SelectionService {
     public Long createSelection(SelectionCreateReqVO createReqVO) {
         // 插入
         SelectionDO selection = SelectionConvert.INSTANCE.convert(createReqVO);
+        selection.setCommentId(0L);
+        selection.setIsWrong(new Byte("0"));
         selectionMapper.insert(selection);
         // 返回
         return selection.getId();

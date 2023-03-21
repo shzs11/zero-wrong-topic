@@ -3,6 +3,7 @@ package edu.gdpu.zero.module.topic.service.subject;
 import java.util.*;
 import javax.validation.*;
 import edu.gdpu.zero.module.topic.controller.admin.subject.vo.*;
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectAndKnowledge;
 import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectDO;
 import edu.gdpu.zero.framework.common.pojo.PageResult;
 
@@ -58,6 +59,13 @@ public interface SubjectService {
      * @return 科目分页
      */
     PageResult<SubjectDO> getSubjectPage(SubjectPageReqVO pageReqVO);
+
+    /*
+            * @description: 获得科目和知识点的级联数据
+            * @author zero
+            * @date: 2023/3/20 15:03
+     */
+    List<SubjectAndKnowledge> getSubjectAndKnowledge();
 
     /**
      * 获得科目列表, 用于 Excel 导出
