@@ -60,6 +60,14 @@ public interface SelectionService {
     PageResult<SelectionDO> getSelectionPage(SelectionPageReqVO pageReqVO);
 
     /**
+     * 获得选择题分页
+     *
+     * @param pageReqVO 分页查询
+     * @return 选择题分页
+     */
+    PageResult<SelectionRespVO> getSelectionPage2(SelectionPageReqVO pageReqVO);
+
+    /**
      * 获得选择题列表, 用于 Excel 导出
      *
      * @param exportReqVO 查询条件

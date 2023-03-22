@@ -67,6 +67,7 @@ public class SelectionController {
     @PreAuthorize("@ss.hasPermission('topic:selection:query')")
     public CommonResult<SelectionRespVO> getSelection(@RequestParam("id") Long id) {
         SelectionDO selection = selectionService.getSelection(id);
+        SelectionRespVO convert = SelectionConvert.INSTANCE.convert(selection);
         return success(SelectionConvert.INSTANCE.convert(selection));
     }
 
@@ -83,8 +84,8 @@ public class SelectionController {
     @Operation(summary = "获得选择题分页")
     @PreAuthorize("@ss.hasPermission('topic:selection:query')")
     public CommonResult<PageResult<SelectionRespVO>> getSelectionPage(@Valid SelectionPageReqVO pageVO) {
-        PageResult<SelectionDO> pageResult = selectionService.getSelectionPage(pageVO);
-        return success(SelectionConvert.INSTANCE.convertPage(pageResult));
+        PageResult<SelectionRespVO> selectionPage2 = selectionService.getSelectionPage2(pageVO);
+        return success(selectionPage2);
     }
 
     @GetMapping("/export-excel")

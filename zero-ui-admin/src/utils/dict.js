@@ -86,7 +86,9 @@ export const DICT_TYPE = {
 
   // ========== topic 模块 ==========
   SUBJECT_STATUS:'subject_status',//科目状态
-  TOPIC_PUBLIC:'topic_public'
+  TOPIC_PUBLIC:'topic_public',
+  TOPIC_DIFFICULT:'topic_difficult',//题目难度
+  TOPIC_SELECTION:'topic_selection',//选择题选项
 
 }
 

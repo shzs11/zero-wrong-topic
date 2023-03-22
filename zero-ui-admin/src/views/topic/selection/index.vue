@@ -29,7 +29,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="难度" prop="difficulty">
-        <el-input v-model="queryParams.difficulty" placeholder="请输入难度" clearable @keyup.enter.native="handleQuery"/>
+        <el-select v-model="queryParams.difficulty" placeholder="题目难度" clearable size="small">
+          <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_DIFFICULT)"
+                     :key="dict.value" :label="dict.label" :value="dict.value"/>
+        </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
         <el-date-picker v-model="queryParams.createTime" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
@@ -58,11 +61,14 @@
     <el-table v-loading="loading" :data="list">
       <el-table-column label="选择题标识" align="center" prop="id" />
       <el-table-column label="题目" align="center" prop="name" />
-      <el-table-column label="错题标签" align="center" prop="tags" />
-      <el-table-column label="科目编号" align="center" prop="subjectId" />
-      <el-table-column label="知识点" align="center" prop="knowledgeId" />
-      <el-table-column label="难度" align="center" prop="difficulty" />
-      <el-table-column label="解析" align="center" prop="commentId" />
+      <el-table-column label="错题标签" align="center" prop="nameOfTag" />
+      <el-table-column label="科目" align="center" prop="nameOfSubject" />
+      <el-table-column label="知识点" align="center" prop="nameOfKnowledge" />
+      <el-table-column label="难度" align="center" prop="difficulty" >
+        <template v-slot = "scope">
+          <dict-tag :type = "DICT_TYPE.TOPIC_DIFFICULT" :value="scope.row.difficulty"></dict-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="是否错题" align="center" prop="isWrong" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template v-slot="scope">
@@ -102,10 +108,8 @@
         </el-form-item>
         <el-form-item label="参考答案" prop="answer">
           <el-radio-group v-model="form.answer">
-            <el-radio label="1" >选项A</el-radio>
-            <el-radio label="2" >选项B</el-radio>
-            <el-radio label="3" >选项C</el-radio>
-            <el-radio label="4" >选项D</el-radio>
+            <el-radio :label="item.value" :key="item.value"
+                      v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_SELECTION)">{{item.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="标签" prop="tags">
@@ -131,11 +135,10 @@
           </el-select>
         </el-form-item>
         <el-form-item label="难度" prop="difficulty">
-          <el-radio-group v-model="form.difficulty">
-            <el-radio :label="0">易</el-radio>
-            <el-radio :label="1">中</el-radio>
-            <el-radio :label="2">难</el-radio>
-          </el-radio-group>
+          <el-select v-model="form.difficulty" placeholder="题目难度" clearable size="small">
+            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_DIFFICULT)"
+                       :key="dict.value" :label="dict.label" :value="dict.value"/>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -150,6 +153,7 @@
 import { createSelection, updateSelection, deleteSelection, getSelection, getSelectionPage, exportSelectionExcel } from "@/api/topic/selection";
 import { createSubject, updateSubject, deleteSubject, getSubject, getSubjectPage, exportSubjectExcel,getSubjectAndKnowledge} from "@/api/topic/subject";
 import { createTag, updateTag, deleteTag, getTag, getTagPage, exportTagExcel } from "@/api/topic/tag";
+
 export default {
   name: "Selection",
   components: {
@@ -309,6 +313,7 @@ export default {
       const id = row.id;
       getSelection(id).then(response => {
         this.form = response.data;
+        console.log("修改"+this.form)
         this.open = true;
         this.title = "修改选择题";
       });

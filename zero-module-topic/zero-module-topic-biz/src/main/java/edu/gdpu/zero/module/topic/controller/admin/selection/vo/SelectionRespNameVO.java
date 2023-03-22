@@ -1,14 +1,17 @@
 package edu.gdpu.zero.module.topic.controller.admin.selection.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
+
 import java.time.LocalDateTime;
 
 @Schema(description = "管理后台 - 选择题 Response VO")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class SelectionRespVO extends SelectionBaseVO {
+public class SelectionRespNameVO extends SelectionBaseVO {
 
     @Schema(description = "选择题标识", required = true, example = "14178")
     private Long id;
@@ -19,23 +22,6 @@ public class SelectionRespVO extends SelectionBaseVO {
     @Schema(description = "是否错题", required = true)
     private Byte isWrong;
 
-    /**
-     * 选项A
-     */
-    private String optionsA;
-    /**
-     * 选项B
-     */
-    private String optionsB;
-    /**
-     * 选项C
-     */
-    private String optionsC;
-    /**
-     * 选项D
-     */
-    private String optionsD;
-
     @Schema(description = "创建时间", required = true)
     private LocalDateTime createTime;
 
@@ -44,5 +30,4 @@ public class SelectionRespVO extends SelectionBaseVO {
     private String nameOfTag;
 
     private String nameOfKnowledge;
-
 }
