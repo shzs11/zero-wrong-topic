@@ -60,6 +60,14 @@ public interface JudgmentService {
     PageResult<JudgmentDO> getJudgmentPage(JudgmentPageReqVO pageReqVO);
 
     /**
+     * 获得判断题分页2
+     *
+     * @param pageReqVO 分页查询
+     * @return 判断题分页
+     */
+    PageResult<JudgmentRespVO> getJudgmentPage2(JudgmentPageReqVO pageReqVO);
+
+    /**
      * 获得判断题列表, 用于 Excel 导出
      *
      * @param exportReqVO 查询条件

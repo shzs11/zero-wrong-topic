@@ -1,5 +1,11 @@
 package edu.gdpu.zero.module.topic.service.judgment;
 
+import edu.gdpu.zero.module.topic.dal.dataobject.knowledge.KnowledgeDO;
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectDO;
+import edu.gdpu.zero.module.topic.dal.dataobject.tag.TagDO;
+import edu.gdpu.zero.module.topic.dal.mysql.knowledge.KnowledgeMapper;
+import edu.gdpu.zero.module.topic.dal.mysql.subject.SubjectMapper;
+import edu.gdpu.zero.module.topic.dal.mysql.tag.TagMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +32,15 @@ public class JudgmentServiceImpl implements JudgmentService {
 
     @Resource
     private JudgmentMapper judgmentMapper;
+
+    @Resource
+    private SubjectMapper subjectMapper;
+
+    @Resource
+    private KnowledgeMapper knowledgeMapper;
+
+    @Resource
+    private TagMapper tagMapper;
 
     @Override
     public Long createJudgment(JudgmentCreateReqVO createReqVO) {
@@ -62,6 +77,7 @@ public class JudgmentServiceImpl implements JudgmentService {
 
     @Override
     public JudgmentDO getJudgment(Long id) {
+
         return judgmentMapper.selectById(id);
     }
 
@@ -72,7 +88,35 @@ public class JudgmentServiceImpl implements JudgmentService {
 
     @Override
     public PageResult<JudgmentDO> getJudgmentPage(JudgmentPageReqVO pageReqVO) {
+
+
         return judgmentMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public PageResult<JudgmentRespVO> getJudgmentPage2(JudgmentPageReqVO pageReqVO) {
+        PageResult<JudgmentDO> judgmentDOPageResult = judgmentMapper.selectPage(pageReqVO);
+        PageResult<JudgmentRespVO> judgmentRespVOPageResult = JudgmentConvert.INSTANCE.convertPage(judgmentDOPageResult);
+        List<JudgmentRespVO> list = judgmentRespVOPageResult.getList();
+        for(int i = 0;i < list.size();i++){
+            JudgmentRespVO judgmentRespVO = list.get(i);
+            //翻译
+            //翻译
+            SubjectDO subjectDO = subjectMapper.selectById(judgmentRespVO.getSubjectId());
+            judgmentRespVO.setNameOfSubject(subjectDO.getName());
+
+
+            KnowledgeDO knowledgeDO = knowledgeMapper.selectById(judgmentRespVO.getKnowledgeId());
+            judgmentRespVO.setNameOfKnowledge(knowledgeDO.getName());
+
+            TagDO tagDO = tagMapper.selectById(judgmentRespVO.getTags());
+            judgmentRespVO.setNameOfTag(tagDO.getName());
+            list.set(i,judgmentRespVO);
+        }
+        PageResult<JudgmentRespVO> judgmentRespVOPageResult1 = new PageResult<>(list, judgmentRespVOPageResult.getTotal());
+
+
+        return judgmentRespVOPageResult1;
     }
 
     @Override

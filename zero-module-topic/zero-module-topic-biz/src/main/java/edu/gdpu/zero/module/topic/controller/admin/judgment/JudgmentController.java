@@ -83,8 +83,8 @@ public class JudgmentController {
     @Operation(summary = "获得判断题分页")
     @PreAuthorize("@ss.hasPermission('topic:judgment:query')")
     public CommonResult<PageResult<JudgmentRespVO>> getJudgmentPage(@Valid JudgmentPageReqVO pageVO) {
-        PageResult<JudgmentDO> pageResult = judgmentService.getJudgmentPage(pageVO);
-        return success(JudgmentConvert.INSTANCE.convertPage(pageResult));
+        PageResult<JudgmentRespVO> judgmentPage2 = judgmentService.getJudgmentPage2(pageVO);
+        return success(judgmentPage2);
     }
 
     @GetMapping("/export-excel")

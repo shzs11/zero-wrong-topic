@@ -8,7 +8,8 @@
       </el-form-item>
       <el-form-item label="错题标签" prop="tags">
         <el-select v-model="queryParams.tags" placeholder="请选择错题标签" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+          <el-option v-for="tag in this.tags"
+                     :key="tag.id" :label="tag.name" :value="tag.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="科目编号" prop="subjectId">
@@ -66,10 +67,14 @@
       <el-table-column label="判断题标识" align="center" prop="id" />
       <el-table-column label="题目" align="center" prop="name" />
       <el-table-column label="参考答案：对/错" align="center" prop="answer" />
-      <el-table-column label="错题标签" align="center" prop="tags" />
-      <el-table-column label="科目编号" align="center" prop="subjectId" />
-      <el-table-column label="知识点" align="center" prop="knowledgeId" />
-      <el-table-column label="难度" align="center" prop="difficulty" />
+      <el-table-column label="错题标签" align="center" prop="nameOfTag" />
+      <el-table-column label="科目编号" align="center" prop="nameOfSubject" />
+      <el-table-column label="知识点" align="center" prop="nameOfKnowledge" />
+      <el-table-column label="难度" align="center" prop="difficulty" >
+        <template v-slot = "scope">
+          <dict-tag :type = "DICT_TYPE.TOPIC_DIFFICULT" :value="scope.row.difficulty"></dict-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="是否错题" align="center" prop="isWrong" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template v-slot="scope">
