@@ -36,6 +36,12 @@ public class SelectionRespVO extends SelectionBaseVO {
      */
     private String optionsD;
 
+    /**
+     * 参考答案
+     */
+    private String answer;
+
+
     @Schema(description = "创建时间", required = true)
     private LocalDateTime createTime;
 

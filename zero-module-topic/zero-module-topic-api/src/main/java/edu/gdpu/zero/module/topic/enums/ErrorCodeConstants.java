@@ -19,5 +19,9 @@ public interface ErrorCodeConstants {
 
     ErrorCode KNOWLEDGE_NOT_EXISTS = new ErrorCode(1000000005, "知识点不存在");
 
+    // ========== 判断题 TODO 补充编号 ==========
+    ErrorCode JUDGMENT_NOT_EXISTS = new ErrorCode(1000000006, "判断题不存在");
+
+
 
 }

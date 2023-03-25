@@ -89,6 +89,7 @@ export const DICT_TYPE = {
   TOPIC_PUBLIC:'topic_public',
   TOPIC_DIFFICULT:'topic_difficult',//题目难度
   TOPIC_SELECTION:'topic_selection',//选择题选项
+  TOPIC_JUGEMENT:'topic_jugement',//判断题对错
 
 }
 
