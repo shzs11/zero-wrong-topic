@@ -19,4 +19,11 @@ public class InterlocutionRespVO extends InterlocutionBaseVO {
     @Schema(description = "创建时间", required = true)
     private LocalDateTime createTime;
 
+    //翻译
+    private String nameOfSubject;
+
+    private String nameOfKnowledge;
+
+    private String nameOfTag;
+
 }

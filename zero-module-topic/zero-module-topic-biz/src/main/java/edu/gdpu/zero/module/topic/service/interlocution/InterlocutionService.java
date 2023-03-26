@@ -60,6 +60,14 @@ public interface InterlocutionService {
     PageResult<InterlocutionDO> getInterlocutionPage(InterlocutionPageReqVO pageReqVO);
 
     /**
+     * 获得问答题分页2
+     *
+     * @param pageReqVO 分页查询2
+     * @return 问答题分页2
+     */
+    PageResult<InterlocutionRespVO> getInterlocutionPage2(InterlocutionPageReqVO pageReqVO);
+
+    /**
      * 获得问答题列表, 用于 Excel 导出
      *
      * @param exportReqVO 查询条件

@@ -1,5 +1,11 @@
 package edu.gdpu.zero.module.topic.service.interlocution;
 
+import edu.gdpu.zero.module.topic.dal.dataobject.knowledge.KnowledgeDO;
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectDO;
+import edu.gdpu.zero.module.topic.dal.dataobject.tag.TagDO;
+import edu.gdpu.zero.module.topic.dal.mysql.knowledge.KnowledgeMapper;
+import edu.gdpu.zero.module.topic.dal.mysql.subject.SubjectMapper;
+import edu.gdpu.zero.module.topic.dal.mysql.tag.TagMapper;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +32,15 @@ public class InterlocutionServiceImpl implements InterlocutionService {
 
     @Resource
     private InterlocutionMapper interlocutionMapper;
+
+    @Resource
+    private SubjectMapper subjectMapper;
+
+    @Resource
+    private KnowledgeMapper knowledgeMapper;
+
+    @Resource
+    private TagMapper tagMapper;
 
     @Override
     public Long createInterlocution(InterlocutionCreateReqVO createReqVO) {
@@ -74,6 +89,36 @@ public class InterlocutionServiceImpl implements InterlocutionService {
     @Override
     public PageResult<InterlocutionDO> getInterlocutionPage(InterlocutionPageReqVO pageReqVO) {
         return interlocutionMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public PageResult<InterlocutionRespVO> getInterlocutionPage2(InterlocutionPageReqVO pageReqVO) {
+
+        PageResult<InterlocutionDO> interlocutionDOPageResult = interlocutionMapper.selectPage(pageReqVO);
+
+        PageResult<InterlocutionRespVO> interlocutionRespVOPageResult = InterlocutionConvert.INSTANCE.convertPage(interlocutionDOPageResult);
+
+        List<InterlocutionRespVO> list = interlocutionRespVOPageResult.getList();
+        for(int i = 0 ;i < list.size();i++ ){
+            InterlocutionRespVO respVO = list.get(i);
+
+            //翻译
+            SubjectDO subjectDO = subjectMapper.selectById(respVO.getSubjectId());
+            respVO.setNameOfSubject(subjectDO.getName());
+
+
+            KnowledgeDO knowledgeDO = knowledgeMapper.selectById(respVO.getKnowledgeId());
+            respVO.setNameOfKnowledge(knowledgeDO.getName());
+
+            TagDO tagDO = tagMapper.selectById(respVO.getTags());
+            respVO.setNameOfTag(tagDO.getName());
+            list.set(i,respVO);
+        }
+
+        PageResult<InterlocutionRespVO> result = new PageResult<>(list, interlocutionRespVOPageResult.getTotal());
+
+
+        return result;
     }
 
     @Override

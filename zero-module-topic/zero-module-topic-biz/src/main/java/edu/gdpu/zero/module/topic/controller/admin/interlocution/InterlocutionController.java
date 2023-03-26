@@ -83,8 +83,8 @@ public class InterlocutionController {
     @Operation(summary = "获得问答题分页")
     @PreAuthorize("@ss.hasPermission('topic:interlocution:query')")
     public CommonResult<PageResult<InterlocutionRespVO>> getInterlocutionPage(@Valid InterlocutionPageReqVO pageVO) {
-        PageResult<InterlocutionDO> pageResult = interlocutionService.getInterlocutionPage(pageVO);
-        return success(InterlocutionConvert.INSTANCE.convertPage(pageResult));
+        PageResult<InterlocutionRespVO> interlocutionPage2 = interlocutionService.getInterlocutionPage2(pageVO);
+        return success(interlocutionPage2);
     }
 
     @GetMapping("/export-excel")

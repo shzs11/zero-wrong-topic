@@ -59,11 +59,15 @@
       <el-table-column label="问答题标识" align="center" prop="id" />
       <el-table-column label="题目" align="center" prop="content" />
       <el-table-column label="正确答案" align="center" prop="answer" />
-      <el-table-column label="题目所有标签" align="center" prop="tags" />
-      <el-table-column label="科目编号" align="center" prop="subjectId" />
+      <el-table-column label="题目标签" align="center" prop="nameOfTag" />
+      <el-table-column label="科目编号" align="center" prop="nameOfSubject" />
       <el-table-column label="是否错题" align="center" prop="isWrong" />
-      <el-table-column label="知识点" align="center" prop="knowledgeId" />
-      <el-table-column label="难度" align="center" prop="difficulty" />
+      <el-table-column label="知识点" align="center" prop="nameOfKnowledge" />
+      <el-table-column label="难度" align="center" prop="difficulty" >
+        <template v-slot = "scope">
+          <dict-tag :type = "DICT_TYPE.TOPIC_DIFFICULT" :value="scope.row.difficulty"></dict-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createTime" width="180">
         <template v-slot="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
