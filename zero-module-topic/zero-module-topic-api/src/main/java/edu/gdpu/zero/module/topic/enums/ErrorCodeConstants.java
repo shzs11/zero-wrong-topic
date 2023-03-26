@@ -22,6 +22,10 @@ public interface ErrorCodeConstants {
     // ========== 判断题 TODO 补充编号 ==========
     ErrorCode JUDGMENT_NOT_EXISTS = new ErrorCode(1000000006, "判断题不存在");
 
+    // ========== 问答题 TODO 补充编号 ==========
+    ErrorCode INTERLOCUTION_NOT_EXISTS = new ErrorCode(1000000007, "问答题不存在");
+
+
 
 
 }
