@@ -3,29 +3,32 @@
 
     <!-- 搜索工作栏 -->
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="题目所有标签" prop="tags">
-        <el-select v-model="queryParams.tags" placeholder="请选择题目所有标签" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+      <el-form-item label="题目标签" prop="tags">
+        <el-select v-model="queryParams.tags" placeholder="请选择题目标签" clearable size="small">
+          <el-option v-for="tag in this.tags"
+                     :key="tag.id" :label="tag.name" :value="tag.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="科目编号" prop="subjectId">
-        <el-select v-model="queryParams.subjectId" placeholder="请选择科目编号" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="是否错题" prop="isWrong">
-        <el-select v-model="queryParams.isWrong" placeholder="请选择是否错题" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+        <el-select v-model="queryParams.subjectId" placeholder="请选择科目" clearable size="small"
+                   @change="subjectLevelOneChanged(queryParams.subjectId)">
+          <el-option v-for="subject in this.subjectOne"
+                     :key="subject.id" :label="subject.name" :value="subject.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="知识点" prop="knowledgeId">
-        <el-select v-model="queryParams.knowledgeId" placeholder="请选择知识点" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+        <el-select v-model="queryParams.knowledgeId" placeholder="请选择">
+          <el-option
+            v-for="knowledge in knowledgeTwo"
+            :key="knowledge.id"
+            :label="knowledge.name"
+            :value="knowledge.id"/>
         </el-select>
       </el-form-item>
       <el-form-item label="难度" prop="difficulty">
         <el-select v-model="queryParams.difficulty" placeholder="请选择难度" clearable size="small">
-          <el-option label="请选择字典生成" value="" />
+          <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_DIFFICULT)"
+                     :key="dict.value" :label="dict.label" :value="dict.value"/>
         </el-select>
       </el-form-item>
       <el-form-item label="创建时间" prop="createTime">
@@ -90,22 +93,30 @@
         </el-form-item>
         <el-form-item label="题目所有标签" prop="tags">
           <el-select v-model="form.tags" placeholder="请选择题目所有标签">
-            <el-option label="请选择字典生成" value="" />
+            <el-option v-for="tag in this.tags"
+                       :key="tag.id" :label="tag.name" :value="tag.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="科目编号" prop="subjectId">
-          <el-select v-model="form.subjectId" placeholder="请选择科目编号">
-            <el-option label="请选择字典生成" value="" />
+          <el-select v-model="form.subjectId" placeholder="请选择科目" clearable size="small"
+                     @change="subjectLevelOneChanged(form.subjectId)">
+            <el-option v-for="subject in this.subjectOne"
+                       :key="subject.id" :label="subject.name" :value="subject.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="知识点" prop="knowledgeId">
-          <el-select v-model="form.knowledgeId" placeholder="请选择知识点">
-            <el-option label="请选择字典生成" value="" />
+          <el-select v-model="form.knowledgeId" placeholder="请选择">
+            <el-option
+              v-for="knowledge in knowledgeTwo"
+              :key="knowledge.id"
+              :label="knowledge.name"
+              :value="knowledge.id"/>
           </el-select>
         </el-form-item>
         <el-form-item label="难度" prop="difficulty">
           <el-select v-model="form.difficulty" placeholder="请选择难度">
-            <el-option label="请选择字典生成" value="" />
+            <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_DIFFICULT)"
+                       :key="dict.value" :label="dict.label" :value="dict.value"/>
           </el-select>
         </el-form-item>
       </el-form>
@@ -120,6 +131,8 @@
 <script>
 import { createInterlocution, updateInterlocution, deleteInterlocution, getInterlocution, getInterlocutionPage, exportInterlocutionExcel } from "@/api/topic/interlocution";
 import Editor from '@/components/Editor';
+import { createSubject, updateSubject, deleteSubject, getSubject, getSubjectPage, exportSubjectExcel,getSubjectAndKnowledge} from "@/api/topic/subject";
+import { createTag, updateTag, deleteTag, getTag, getTagPage, exportTagExcel } from "@/api/topic/tag";
 
 export default {
   name: "Interlocution",
@@ -156,6 +169,11 @@ export default {
       },
       // 表单参数
       form: {},
+      //标签
+      tags:{},
+      //课程和知识点的级联
+      subjectOne:[],
+      knowledgeTwo:{},
       // 表单校验
       rules: {
         content: [{ required: true, message: "题目不能为空", trigger: "blur" }],
@@ -169,6 +187,8 @@ export default {
   },
   created() {
     this.getList();
+    this.getTag();
+    this.getKnowledge();
   },
   methods: {
     /** 查询列表 */
@@ -180,6 +200,38 @@ export default {
         this.total = response.data.total;
         this.loading = false;
       });
+    },
+    /** 查询标签*/
+    getTag(){
+      var qeryParams = {
+        page:"1",
+        size:"20"
+      }
+      getTagPage(qeryParams).then(response=>{
+        this.tags = response.data.list;
+        console.log(this.tags)
+      })
+    },
+    /** 查询知识点**/
+    getKnowledge(){
+      getSubjectAndKnowledge().then(response=>{
+        this.knowledge = response.data;
+        this.subjectOne = response.data;
+        console.log(this.subjectOne)
+      })
+
+    },
+    subjectLevelOneChanged(value){
+      console.log(value)
+      for(let i = 0; i < this.subjectOne.length;i++){
+        if(this.subjectOne[i].id === value){
+          this.knowledgeTwo = this.subjectOne[i].knowledgeDOList;
+          this.queryParams.knowledgeId = ""
+          this.form.knowledgeId = ""
+        }
+      }
+      console.log(this.knowledgeTwo)
+
     },
     /** 取消按钮 */
     cancel() {

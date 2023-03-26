@@ -31,6 +31,8 @@ public class InterlocutionServiceImpl implements InterlocutionService {
     public Long createInterlocution(InterlocutionCreateReqVO createReqVO) {
         // 插入
         InterlocutionDO interlocution = InterlocutionConvert.INSTANCE.convert(createReqVO);
+        interlocution.setIsWrong(new Byte("0"));
+        interlocution.setCommentId(0L);
         interlocutionMapper.insert(interlocution);
         // 返回
         return interlocution.getId();

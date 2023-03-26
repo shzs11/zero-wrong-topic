@@ -126,7 +126,7 @@
               :key="knowledge.id"
               :label="knowledge.name"
               :value="knowledge.id"/>
-          </el-select>>
+          </el-select>
         </el-form-item>
         <el-form-item label="难度" prop="difficulty">
           <el-select v-model="form.difficulty" placeholder="请选择难度">
