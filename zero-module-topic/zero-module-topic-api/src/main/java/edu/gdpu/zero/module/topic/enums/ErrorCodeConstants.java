@@ -25,6 +25,10 @@ public interface ErrorCodeConstants {
     // ========== 问答题 TODO 补充编号 ==========
     ErrorCode INTERLOCUTION_NOT_EXISTS = new ErrorCode(1000000007, "问答题不存在");
 
+    // ========== 错题关联 TODO 补充编号 ==========
+    ErrorCode WRONG_NOT_EXISTS = new ErrorCode(1000000008, "错题关联不存在");
+
+
 
 
 

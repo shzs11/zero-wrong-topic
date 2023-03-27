@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import edu.gdpu.zero.module.topic.controller.admin.selection.vo.*;
 import edu.gdpu.zero.module.topic.dal.dataobject.selection.SelectionDO;
@@ -47,6 +48,9 @@ public class SelectionServiceImpl implements SelectionService {
     public Long createSelection(SelectionCreateReqVO createReqVO) {
         // 插入
         SelectionDO selection = SelectionConvert.INSTANCE.convert(createReqVO);
+        //时间戳生成唯一id
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssSSSS");
+        selection.setId(new Long(sdf.format(System.currentTimeMillis())));
         selection.setCommentId(0L);
         selection.setIsWrong(new Byte("0"));
         selectionMapper.insert(selection);

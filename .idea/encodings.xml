@@ -75,24 +75,28 @@
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/controller/admin/message/vo/MessageUpdateReqVO.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/controller/admin/selection" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/controller/admin/tag" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/controller/admin/wrong" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/convert/interlocution" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/convert/judgment" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/convert/knowledge" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/convert/message/MessageConvert.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/convert/selection" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/convert/tag" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/convert/wrong" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/dataobject/interlocution" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/dataobject/judgment" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/dataobject/knowledge" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/dataobject/message/MessageDO.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/dataobject/selection" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/dataobject/tag" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/dataobject/wrong" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/mysql/interlocution" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/mysql/judgment" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/mysql/knowledge" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/mysql/message/MessageMapper.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/mysql/selection" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/mysql/tag" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/dal/mysql/wrong" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/service/interlocution" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/service/judgment" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/service/knowledge" charset="GBK" />
@@ -100,6 +104,7 @@
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/service/message/MessageServiceImpl.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/service/selection" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/service/tag" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/java/edu/gdpu/zero/module/topic/service/wrong" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/resources/mapper/interlocution" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/resources/mapper/judgment" charset="GBK" />
@@ -107,6 +112,7 @@
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/resources/mapper/selection" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/resources/mapper/subject/MessageMapper.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/resources/mapper/subject/TagMapper.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-module-topic/zero-module-topic-biz/src/main/resources/mapper/wrong" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-server/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zero-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/api/topic/interlocution.js" charset="GBK" />
@@ -115,6 +121,7 @@
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/api/topic/message.js" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/api/topic/selection.js" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/api/topic/tag.js" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-admin/src/api/topic/wrong.js" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/interlocution" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/interlocution/index.vue" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/judgment" charset="GBK" />
@@ -126,5 +133,18 @@
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/selection/index.vue" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/tag" charset="GBK" />
     <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/tag/index.vue" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/wrong" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-admin/src/views/topic/wrong/index.vue" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/api" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/address" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/category" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/checkout" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/forgot" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/order" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/product" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/profile" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/search" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/zero-ui-app/pages/setting" charset="GBK" />
   </component>
 </project>
