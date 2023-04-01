@@ -29,6 +29,12 @@ Vue.use(Router)
 // 公共路由
 export const constantRoutes = [
   {
+    path: '/selection',
+    component: ()=>import('@/views/topic/wrong/selection'),
+    name: 'selection',
+    meta: { title: 'createForm', icon: 'table' }
+  },
+  {
     path: '/redirect',
     component: Layout,
     hidden: true,

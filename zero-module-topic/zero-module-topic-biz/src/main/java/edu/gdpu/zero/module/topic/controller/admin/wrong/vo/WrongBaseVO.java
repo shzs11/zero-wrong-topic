@@ -15,7 +15,6 @@ import javax.validation.constraints.*;
 public class WrongBaseVO {
 
     @Schema(description = "题目编号", required = true, example = "10638")
-    @NotNull(message = "题目编号不能为空")
     private Long topicId;
 
     @Schema(description = "错误答案", required = true)
@@ -23,7 +22,6 @@ public class WrongBaseVO {
     private String correctAnswer;
 
     @Schema(description = "用户id", required = true, example = "12089")
-    @NotNull(message = "用户id不能为空")
     private Long userId;
 
     @Schema(description = "题目类型", required = true, example = "2")
@@ -35,7 +33,6 @@ public class WrongBaseVO {
     private String summary;
 
     @Schema(description = "练习次数", required = true, example = "28729")
-    @NotNull(message = "练习次数不能为空")
     private Integer practiceCount;
 
 }
