@@ -9,7 +9,7 @@
     <el-tab-pane label="选择题" name="first">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="题目" prop="name">
-          <el-input style="width: 300px"  type="textarea" v-model="form.name" placeholder="请输入题目" />
+          <el-input style="width: 300px"  type="textarea" v-model="form.selectionName" placeholder="请输入题目" />
         </el-form-item>
         <el-form-item label="选项A" prop="optionsA">
           <el-input style="width: 300px" type="textarea" v-model="form.optionsA" placeholder="请输入选项A" />
@@ -23,21 +23,21 @@
         <el-form-item label="选项D" prop="optionsD">
           <el-input style="width: 300px" v-model="form.optionsD" type="textarea" placeholder="请输入选项D" />
         </el-form-item>
-        <el-form-item label="你的错误答案" prop="answer">
+        <el-form-item label="你的答案" prop="answer">
           <el-radio-group v-model="form.correctAnswer">
             <el-radio :label="item.value" :key="item.value"
                       v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_SELECTION)">{{item.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="正确答案" prop="answer">
-          <el-radio-group v-model="form.answer">
+          <el-radio-group v-model="form.selectionAnswer">
             <el-radio :label="item.value" :key="item.value"
                       v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_SELECTION)">{{item.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="标签" prop="tags">
           <el-select v-model="form.tags" placeholder="请选择标签">
-            <el-option v-for="tag in this.tag"
+            <el-option v-for="tag in this.tags"
                        :key="tag.id" :label="tag.name" :value="tag.id"/>
           </el-select>
         </el-form-item>
@@ -75,10 +75,16 @@
     <el-tab-pane label="判断题" name="second">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="题目" prop="name">
-          <el-input style="width: 300px" type="textarea" v-model="form.name" placeholder="请输入题目" />
+          <el-input style="width: 300px" type="textarea" v-model="form.judgementName" placeholder="请输入题目" />
         </el-form-item>
-        <el-form-item label="答案" prop="answer">
-          <el-radio-group v-model="form.answer">
+        <el-form-item label="你的答案" prop="answer">
+          <el-radio-group v-model="form.judgeCorrectAnswer">
+            <el-radio :label="item.value" :key="item.value"
+                      v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_JUGEMENT)">{{item.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="正确答案" prop="answer">
+          <el-radio-group v-model="form.judgeAnswer">
             <el-radio :label="item.value" :key="item.value"
                       v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_JUGEMENT)">{{item.label}}</el-radio>
           </el-radio-group>
@@ -111,7 +117,13 @@
                        :key="dict.value" :label="dict.label" :value="dict.value"/>
           </el-select>
         </el-form-item>
-
+        <el-form-item label="个人总结" prop="summary">
+          <el-input  style="width: 300px" v-model="form.summary" type="textarea" placeholder="请输入个人总结" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="submitJudgeForm">保存</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </el-form-item>
       </el-form>
     </el-tab-pane>
 
@@ -120,8 +132,11 @@
         <el-form-item label="题目">
           <editor style="width: 400px" v-model="form.content" :min-height="192"/>
         </el-form-item>
+        <el-form-item label="错误答案">
+          <editor style="width: 400px"  v-model="form.interCorrectAnswer" :min-height="192"/>
+        </el-form-item>
         <el-form-item label="正确答案">
-          <editor style="width: 400px"  v-model="form.answer" :min-height="192"/>
+          <editor style="width: 400px"  v-model="form.interAnswer" :min-height="192"/>
         </el-form-item>
         <el-form-item label="题目所有标签" prop="tags">
           <el-select v-model="form.tags" placeholder="请选择题目所有标签">
@@ -155,7 +170,7 @@
           <el-input  style="width: 300px" v-model="form.summary" type="textarea" placeholder="请输入个人总结" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm">保存</el-button>
+          <el-button type="primary" @click="submitContentForm">保存</el-button>
           <el-button @click="cancel">取 消</el-button>
         </el-form-item>
       </el-form>
@@ -183,11 +198,13 @@ export default {
       activeIndex: '1',
       activeIndex2: '1',
       activeName: 'first',
-      form:{},
+      form:{
+        judgeAnswer:undefined
+      },
       //科目
       subject:{},
       //标签
-      tag:{},
+      tags:{},
       //课程和知识点的级联
       subjectOne:[],
       knowledgeTwo:{},
@@ -226,7 +243,7 @@ export default {
 
       });
     },
-    //提交选择题
+    //提交判断题
     submitJudgeForm(){
 
       this.$refs["form"].validate(valid => {
@@ -234,10 +251,31 @@ export default {
           return;
         }
         // 添加的提交
-        this.form.topicType="0"
+        //设置题目类型
+        this.form.topicType="1"
         createWrong(this.form).then(response => {
-          this.$modal.msgSuccess("新增成功");
+          this.$modal.msgSuccess("判断题新增成功");
           this.open = false;
+          this.form = {};
+          this.getList();
+        });
+
+      });
+    },
+    //提交问答题
+    submitContentForm(){
+
+      this.$refs["form"].validate(valid => {
+        if (!valid) {
+          return;
+        }
+        // 添加的提交
+        //设置题目类型
+        this.form.topicType="2"
+        createWrong(this.form).then(response => {
+          this.$modal.msgSuccess("判断题新增成功");
+          this.open = false;
+          //清空表单
           this.form = {};
           this.getList();
         });
@@ -275,7 +313,7 @@ export default {
         size:"20"
       }
       getTagPage(qeryParams).then(response=>{
-        this.tag = response.data.list;
+        this.tags = response.data.list;
         console.log(this.tags)
       })
     },
@@ -300,6 +338,8 @@ export default {
       this.$router.push({path:"/selection"});
     },
     handleClick(tab, event) {
+      //清空表单
+      this.form={}
       console.log(tab, event);
     }
   }

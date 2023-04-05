@@ -17,8 +17,7 @@ public class WrongBaseVO {
     @Schema(description = "题目编号", required = true, example = "10638")
     private Long topicId;
 
-    @Schema(description = "错误答案", required = true)
-    @NotNull(message = "错误答案不能为空")
+    @Schema(description = "选择题错误答案", required = true)
     private String correctAnswer;
 
     @Schema(description = "用户id", required = true, example = "12089")

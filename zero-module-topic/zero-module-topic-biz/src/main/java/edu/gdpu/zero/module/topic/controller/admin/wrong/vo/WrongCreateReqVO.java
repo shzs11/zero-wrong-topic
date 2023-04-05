@@ -13,24 +13,40 @@ public class WrongCreateReqVO extends WrongBaseVO {
 
 
     @Schema(description = "选项A", required = true)
-    @NotNull(message = "选项A不能为空")
     private String optionsA;
 
     @Schema(description = "选项B", required = true)
-    @NotNull(message = "选项B不能为空")
     private String optionsB;
 
     @Schema(description = "选项C", required = true)
-    @NotNull(message = "选项C不能为空")
     private String optionsC;
 
     @Schema(description = "选项D", required = true)
-    @NotNull(message = "选项D不能为空")
     private String optionsD;
 
-    @Schema(description = "参考答案", required = true)
-    @NotNull(message = "参考答案不能为空")
-    private String answer;
+    @Schema(description = "选择题正确答案", required = true)
+    private String selectionAnswer;
+
+    @Schema(description = "选择题详情",required = true)
+    private String selectionName;
+
+    @Schema(description = "判断题详情",required = true)
+    private String judgementName;
+
+    @Schema(description = "问答题详情",required = true)
+    private String content;
+
+    @Schema(description = "判断题错题答案", required = true)
+    private String judgeCorrectAnswer;
+
+    @Schema(description = "判断题正确答案", required = true)
+    private String judgeAnswer;
+
+    @Schema(description = "问答题正确答案",required = true)
+    private String interAnswer;
+
+    @Schema(description = "问答题错误答案",required = true)
+    private String interCorrectAnswer;
 
     private String tags;
 
@@ -38,6 +54,6 @@ public class WrongCreateReqVO extends WrongBaseVO {
 
     private Long knowledgeId;
 
-    private Long difficult;
+    private Long difficulty;
 
 }
