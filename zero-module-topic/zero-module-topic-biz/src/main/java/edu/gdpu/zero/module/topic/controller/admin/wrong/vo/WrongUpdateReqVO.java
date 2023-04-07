@@ -15,4 +15,7 @@ public class WrongUpdateReqVO extends WrongBaseVO {
     @NotNull(message = "错题号不能为空")
     private Long id;
 
+    private String selectionName;
+
+
 }

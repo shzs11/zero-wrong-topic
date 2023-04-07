@@ -87,6 +87,14 @@ public class WrongController {
         return success(WrongConvert.INSTANCE.convertPage(pageResult));
     }
 
+    @GetMapping("/page2")
+    @Operation(summary = "获得错题关联分页")
+    @PreAuthorize("@ss.hasPermission('topic:wrong:query')")
+    public CommonResult<PageResult<WrongRespVO>> getWrongPage2(@Valid WrongPageReqVO pageVO) {
+        PageResult<WrongRespVO> wrongPage2 = wrongService.getWrongPage2(pageVO);
+        return success(wrongPage2);
+    }
+
     @GetMapping("/export-excel")
     @Operation(summary = "导出错题关联 Excel")
     @PreAuthorize("@ss.hasPermission('topic:wrong:export')")

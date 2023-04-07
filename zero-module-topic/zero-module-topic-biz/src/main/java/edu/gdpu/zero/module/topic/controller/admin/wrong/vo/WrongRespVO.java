@@ -16,4 +16,59 @@ public class WrongRespVO extends WrongBaseVO {
     @Schema(description = "创建时间", required = true)
     private LocalDateTime createTime;
 
+    /**
+     * 选择题目
+     */
+    private String selectionName;
+    /**
+     * 题目描述
+     */
+    private String description;
+    /**
+     * 选项A
+     */
+    private String optionsA;
+    /**
+     * 选项B
+     */
+    private String optionsB;
+    /**
+     * 选项C
+     */
+    private String optionsC;
+    /**
+     * 选项D
+     */
+    private String optionsD;
+    /**
+     * 参考答案
+     */
+    private String selectionAnswer;
+    /**
+     * 错题标签
+     */
+    private String tags;
+    /**
+     * 科目编号
+     */
+    private Long subjectId;
+    /**
+     * 知识点
+     */
+    private Long knowledgeId;
+    /**
+     * 难度
+     */
+    private Long difficulty;
+    /**
+     * 解析
+     */
+    private Long commentId;
+
+    private String nameOfSubject;
+
+    private String nameOfKnowledge;
+
+    private String nameOfTags;
+
 }

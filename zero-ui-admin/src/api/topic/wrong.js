@@ -43,6 +43,15 @@ export function getWrongPage(query) {
   })
 }
 
+// 获得错题关联分页
+export function getWrongPage2(query) {
+  return request({
+    url: '/topic/wrong/page2',
+    method: 'get',
+    params: query
+  })
+}
+
 // 导出错题关联 Excel
 export function exportWrongExcel(query) {
   return request({

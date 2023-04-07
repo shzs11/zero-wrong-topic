@@ -5,7 +5,7 @@
     <el-menu-item index="3">简答题</el-menu-item>
   </el-menu>-->
 
-  <el-tabs v-model="activeName" @tab-click="handleClick">
+  <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card"  stretch>
     <el-tab-pane label="选择题" name="first">
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="题目" prop="name">

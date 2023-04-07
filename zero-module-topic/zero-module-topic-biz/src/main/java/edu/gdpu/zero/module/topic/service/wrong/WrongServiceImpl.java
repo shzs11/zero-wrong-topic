@@ -4,9 +4,13 @@ import edu.gdpu.zero.module.topic.convert.selection.SelectionConvert;
 import edu.gdpu.zero.module.topic.dal.dataobject.interlocution.InterlocutionDO;
 import edu.gdpu.zero.module.topic.dal.dataobject.judgment.JudgmentDO;
 import edu.gdpu.zero.module.topic.dal.dataobject.selection.SelectionDO;
+import edu.gdpu.zero.module.topic.dal.dataobject.subject.SubjectDO;
 import edu.gdpu.zero.module.topic.dal.mysql.interlocution.InterlocutionMapper;
 import edu.gdpu.zero.module.topic.dal.mysql.judgment.JudgmentMapper;
+import edu.gdpu.zero.module.topic.dal.mysql.knowledge.KnowledgeMapper;
 import edu.gdpu.zero.module.topic.dal.mysql.selection.SelectionMapper;
+import edu.gdpu.zero.module.topic.dal.mysql.subject.SubjectMapper;
+import edu.gdpu.zero.module.topic.dal.mysql.tag.TagMapper;
 import org.springframework.expression.spel.ast.Selection;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -42,6 +46,15 @@ public class WrongServiceImpl implements WrongService {
 
     @Resource
     private JudgmentMapper judgmentMapper;
+
+    @Resource
+    private SubjectMapper subjectMapper;
+
+    @Resource
+    private TagMapper tagMapper;
+
+    @Resource
+    private KnowledgeMapper knowledgeMapper;
 
     @Resource
     private InterlocutionMapper interlocutionMapper;
@@ -159,6 +172,8 @@ public class WrongServiceImpl implements WrongService {
         validateWrongExists(updateReqVO.getId());
         // 更新
         WrongDO updateObj = WrongConvert.INSTANCE.convert(updateReqVO);
+
+        //更新选择题
         wrongMapper.updateById(updateObj);
     }
 
@@ -167,6 +182,12 @@ public class WrongServiceImpl implements WrongService {
         // 校验存在
         validateWrongExists(id);
         // 删除
+        WrongDO wrongDO = wrongMapper.selectById(id);
+        //删除题目表
+        if(wrongDO == null){
+            throw exception(SELECTION_NOT_EXISTS);
+        }
+        selectionMapper.deleteById(wrongDO.getTopicId());
         wrongMapper.deleteById(id);
     }
 
@@ -188,7 +209,49 @@ public class WrongServiceImpl implements WrongService {
 
     @Override
     public PageResult<WrongDO> getWrongPage(WrongPageReqVO pageReqVO) {
+        PageResult<WrongDO> wrongDOPageResult = wrongMapper.selectPage(pageReqVO);
+
         return wrongMapper.selectPage(pageReqVO);
+    }
+
+    @Override
+    public PageResult<WrongRespVO> getWrongPage2(WrongPageReqVO pageReqVO) {
+
+        //获取当前登录人的id
+        pageReqVO.setUserId(getLoginUserId());
+        PageResult<WrongDO> wrongDOPageResult = wrongMapper.selectPage(pageReqVO);
+        PageResult<WrongRespVO> pageResult = WrongConvert.INSTANCE.convertPage(wrongDOPageResult);
+        List<WrongRespVO> list = pageResult.getList();
+        PageResult<WrongRespVO> wrongRespVOPageResult = null;
+        //如果是选择题
+        if(pageReqVO.getTopicType()!=null&&pageReqVO.getTopicType()==0L){
+            //遍历结果，从选择题表查询数据
+            for(int i =0;i<list.size();i++){
+                WrongRespVO wrongRespVO = list.get(i);
+                Long topicId = wrongRespVO.getTopicId();
+                SelectionDO selectionDO = selectionMapper.selectById(topicId);
+                wrongRespVO.setSelectionName(selectionDO.getName());
+                wrongRespVO.setSelectionAnswer(selectionDO.getAnswer());
+                wrongRespVO.setOptionsA(selectionDO.getOptionsA());
+                wrongRespVO.setOptionsB(selectionDO.getOptionsB());
+                wrongRespVO.setOptionsC(selectionDO.getOptionsC());
+                wrongRespVO.setOptionsD(selectionDO.getOptionsD());
+                wrongRespVO.setTags(selectionDO.getTags());
+                wrongRespVO.setSubjectId(selectionDO.getSubjectId());
+                wrongRespVO.setKnowledgeId(selectionDO.getKnowledgeId());
+                wrongRespVO.setDifficulty(selectionDO.getDifficulty());
+
+                //翻译
+                wrongRespVO.setNameOfSubject( subjectMapper.selectById(selectionDO.getSubjectId()).getName());
+                wrongRespVO.setNameOfKnowledge(knowledgeMapper.selectById(selectionDO.getKnowledgeId()).getName());
+                wrongRespVO.setNameOfTags(tagMapper.selectById(Long.parseLong(selectionDO.getTags())).getName());
+                list.set(i,wrongRespVO);
+            }
+            //返回结果
+           wrongRespVOPageResult = new PageResult<>(list, pageResult.getTotal());
+
+        }
+        return wrongRespVOPageResult;
     }
 
     @Override

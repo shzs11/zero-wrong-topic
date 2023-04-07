@@ -60,6 +60,14 @@ public interface WrongService {
     PageResult<WrongDO> getWrongPage(WrongPageReqVO pageReqVO);
 
     /**
+     * 获得错题
+     *
+     * @param pageReqVO 分页查询
+     * @return 错题关联分页
+     */
+    PageResult<WrongRespVO> getWrongPage2(WrongPageReqVO pageReqVO);
+
+    /**
      * 获得错题关联列表, 用于 Excel 导出
      *
      * @param exportReqVO 查询条件
