@@ -36,12 +36,36 @@ public interface WrongService {
     void deleteWrong(Long id);
 
     /**
+     * 删除错题关联
+     *
+     * @param id 编号
+     */
+    void deleteJudgeWrong(Long id);
+
+    /**
      * 获得错题关联
      *
      * @param id 编号
      * @return 错题关联
      */
     WrongDO getWrong(Long id);
+
+    /**
+     * 获得错题选择题
+     *
+     * @param id 编号
+     * @return 错题关联
+     */
+    WrongRespVO getWrong2(Long id);
+
+
+    /**
+     * 获得错题选择题
+     *
+     * @param id 编号
+     * @return 错题关联
+     */
+    WrongJudgeRespVO getJudgeWrong(Long id);
 
     /**
      * 获得错题关联列表
@@ -66,6 +90,14 @@ public interface WrongService {
      * @return 错题关联分页
      */
     PageResult<WrongRespVO> getWrongPage2(WrongPageReqVO pageReqVO);
+
+    /**
+     * 获得判断题错题
+     *
+     * @param pageReqVO 分页查询
+     * @return 错题关联分页
+     */
+    PageResult<WrongJudgeRespVO> getJudgeWrongPage(WrongPageReqVO pageReqVO);
 
     /**
      * 获得错题关联列表, 用于 Excel 导出

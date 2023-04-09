@@ -61,13 +61,31 @@ public class WrongController {
         return success(true);
     }
 
+    @DeleteMapping("/deleteJudge")
+    @Operation(summary = "删除错题关联")
+    @Parameter(name = "id", description = "编号", required = true)
+    @PreAuthorize("@ss.hasPermission('topic:wrong:delete')")
+    public CommonResult<Boolean> deleteJudgeWrong(@RequestParam("id") Long id) {
+        wrongService.deleteJudgeWrong(id);
+        return success(true);
+    }
+
     @GetMapping("/get")
     @Operation(summary = "获得错题关联")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('topic:wrong:query')")
     public CommonResult<WrongRespVO> getWrong(@RequestParam("id") Long id) {
-        WrongDO wrong = wrongService.getWrong(id);
-        return success(WrongConvert.INSTANCE.convert(wrong));
+        WrongRespVO wrong2 = wrongService.getWrong2(id);
+        return success(wrong2);
+    }
+
+    @GetMapping("/get2")
+    @Operation(summary = "获得判断题错题关联")
+    @Parameter(name = "id", description = "编号", required = true, example = "1024")
+    @PreAuthorize("@ss.hasPermission('topic:wrong:query')")
+    public CommonResult<WrongJudgeRespVO> getJudgeWrong(@RequestParam("id") Long id) {
+        WrongJudgeRespVO judgeWrong = wrongService.getJudgeWrong(id);
+        return success(judgeWrong);
     }
 
     @GetMapping("/list")
@@ -93,6 +111,14 @@ public class WrongController {
     public CommonResult<PageResult<WrongRespVO>> getWrongPage2(@Valid WrongPageReqVO pageVO) {
         PageResult<WrongRespVO> wrongPage2 = wrongService.getWrongPage2(pageVO);
         return success(wrongPage2);
+    }
+
+    @GetMapping("/page3")
+    @Operation(summary = "获得错题关联分页")
+    @PreAuthorize("@ss.hasPermission('topic:wrong:query')")
+    public CommonResult<PageResult<WrongJudgeRespVO>> getWrongPage3(@Valid WrongPageReqVO pageVO) {
+        PageResult<WrongJudgeRespVO> judgeWrongPage = wrongService.getJudgeWrongPage(pageVO);
+        return success(judgeWrongPage);
     }
 
     @GetMapping("/export-excel")

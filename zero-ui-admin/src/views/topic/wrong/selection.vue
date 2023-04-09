@@ -107,7 +107,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" v-dialogDrag append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="题目" prop="name">
-          <el-input v-model="form.name" placeholder="请输入题目" />
+          <el-input v-model="form.selectionName" placeholder="请输入题目" />
         </el-form-item>
         <el-form-item label="选项A" prop="optionsA">
           <el-input v-model="form.optionsA" placeholder="请输入选项A" />
@@ -121,15 +121,21 @@
         <el-form-item label="选项D" prop="optionsD">
           <el-input v-model="form.optionsD" placeholder="请输入选项D" />
         </el-form-item>
-        <el-form-item label="参考答案" prop="answer">
-          <el-radio-group v-model="form.answer">
+        <el-form-item label="错误答案" prop="answer">
+          <el-radio-group v-model="form.correctAnswer">
+            <el-radio :label="item.value" :key="item.value"
+                      v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_SELECTION)">{{item.label}}</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="正确答案" prop="answer">
+          <el-radio-group v-model="form.selectionAnswer">
             <el-radio :label="item.value" :key="item.value"
                       v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_SELECTION)">{{item.label}}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="标签" prop="tags">
-          <el-select v-model="form.tags" placeholder="请选择标签">
-            <el-option v-for="tag in this.tag"
+          <el-select v-model="form.tags" placeholder="请选择标签"   @change="bindSelectChange">
+            <el-option v-for="tag in this.tags"
                        :key="tag.id" :label="tag.name" :value="tag.id"/>
           </el-select>
         </el-form-item>
@@ -155,6 +161,9 @@
                        :key="dict.value" :label="dict.label" :value="dict.value"/>
           </el-select>
         </el-form-item>
+        <el-form-item label="个人总结" prop="summary">
+          <el-input  style="width: 300px" v-model="form.summary" type="textarea" placeholder="个人总结" />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -163,13 +172,150 @@
     </el-dialog>
   </div>
     </el-tab-pane>
-    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+    <el-tab-pane label="判断题" name="second">
+      <div class="app-container">
+
+      <!-- 搜索工作栏 -->
+      <el-form :model="queryParams2" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="创建时间" prop="createTime">
+          <el-date-picker v-model="queryParams2.createTime" style="width: 240px" value-format="yyyy-MM-dd HH:mm:ss" type="daterange"
+                          range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期" :default-time="['00:00:00', '23:59:59']" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="el-icon-search" @click="handleQuery2">搜索</el-button>
+          <el-button icon="el-icon-refresh" @click="resetQuery2">重置</el-button>
+        </el-form-item>
+        <el-tag>标签一</el-tag>
+        <el-tag type="success">标签二</el-tag>
+        <el-tag type="info">标签三</el-tag>
+        <el-tag type="warning">标签四</el-tag>
+        <el-tag type="danger">标签五</el-tag>
+      </el-form>
+
+      <!--     操作工具栏
+          <el-row :gutter="10" class="mb8">
+            <el-col :span="1.5">
+              <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+                         v-hasPermi="['topic:wrong:create']">新增</el-button>
+            </el-col>
+            <el-col :span="1.5">
+              <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport" :loading="exportLoading"
+                         v-hasPermi="['topic:wrong:export']">导出</el-button>
+            </el-col>
+            <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+          </el-row>-->
+
+      <!-- 列表 -->
+      <el-table v-loading="loading" :data="judgeList">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="题目详情">
+                <span>{{ props.row.judgeName }}</span>
+              </el-form-item>
+              <el-form-item label="科目">
+                <span>{{ props.row.nameOfSubject }}</span>
+              </el-form-item>
+              <el-form-item label="知识点">
+                <span>{{ props.row.nameOfKnowledge }}</span>
+              </el-form-item>
+              <el-form-item label="个人总结">
+                <span>{{ props.row.summary }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <el-table-column width="500px" label="题目" align="center" prop="judgeName" />
+        <el-table-column label="正确答案" align="center" prop="selectionAnswer" >
+          <template v-slot = "scope">
+            <dict-tag :type = "DICT_TYPE.TOPIC_JUGEMENT" :value="scope.row.judgeAnswer"></dict-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="标签" align="center" prop="nameOfTags" />
+        <el-table-column label="难度" align="center" prop="difficulty" >
+          <template v-slot = "scope">
+            <dict-tag :type = "DICT_TYPE.TOPIC_DIFFICULT" :value="scope.row.difficulty"></dict-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="练习次数" align="center" prop="practiceCount" />
+        <!--      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+                <template v-slot="scope">
+                  <span>{{ parseTime(scope.row.createTime) }}</span>
+                </template>
+              </el-table-column>-->
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template v-slot="scope">
+            <el-button size="mini" type="text" icon="el-icon-edit" @click="handleJudgeUpdate(scope.row)"
+                       v-hasPermi="['topic:wrong:update']">修改</el-button>
+            <el-button size="mini" type="text" icon="el-icon-delete" @click="handleJudgeDelete(scope.row)"
+                       v-hasPermi="['topic:wrong:delete']">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页组件 -->
+      <pagination v-show="total > 0" :total="total" :page.sync="queryParams2.pageNo" :limit.sync="queryParams2.pageSize"
+                  @pagination="getJudgeList"/>
+
+      <!-- 对话框(添加 / 修改) -->
+      <el-dialog :title="title" :visible.sync="open1" width="500px" v-dialogDrag append-to-body>
+        <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+          <el-form-item label="题目" prop="name">
+            <el-input v-model="form.judgeName" placeholder="请输入题目" />
+          </el-form-item>
+          <el-form-item label="答案" prop="answer">
+            <el-radio-group v-model="form.judgeAnswer">
+              <el-radio :label="item.value" :key="item.value"
+                        v-for="item in this.getDictDatas(DICT_TYPE.TOPIC_JUGEMENT)">{{item.label}}</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="标签" prop="tags">
+            <el-select v-model="form.tags" placeholder="请选择标签"   @change="bindSelectChange">
+              <el-option v-for="tag in this.tags"
+                         :key="tag.id" :label="tag.name" :value="tag.id"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="科目" prop="subjectId">
+            <el-select v-model="form.subjectId" placeholder="请选择科目" clearable size="small"
+                       @change="subjectLevelOneChanged(form.subjectId)">
+              <el-option v-for="subject in this.subjectOne"
+                         :key="subject.id" :label="subject.name" :value="subject.id"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="知识点" prop="knowledgeId">
+            <el-select v-model="form.knowledgeId" placeholder="请选择">
+              <el-option
+                v-for="knowledge in knowledgeTwo"
+                :key="knowledge.id"
+                :label="knowledge.name"
+                :value="knowledge.id"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="难度" prop="difficulty">
+            <el-select v-model="form.difficulty" placeholder="题目难度" clearable size="small">
+              <el-option v-for="dict in this.getDictDatas(DICT_TYPE.TOPIC_DIFFICULT)"
+                         :key="dict.value" :label="dict.label" :value="dict.value"/>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="个人总结" prop="summary">
+            <el-input  style="width: 300px" v-model="form.summary" type="textarea" placeholder="个人总结" />
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="submitJudgeForm">确 定</el-button>
+          <el-button @click="cancel">取 消</el-button>
+        </div>
+      </el-dialog>
+    </div></el-tab-pane>
+    <el-tab-pane label="问答题" name="third">
+
+    </el-tab-pane>
   </el-tabs>
 </template>
 
 <script>
-import { createWrong, updateWrong, deleteWrong, getWrong, getWrongPage,getWrongPage2, exportWrongExcel } from "@/api/topic/wrong";
+import { createWrong, updateWrong, deleteWrong,deleteJudgeWrong,getWrong,getJudgeWrong, getWrongPage,getWrongPage2,getWrongPage3, exportWrongExcel } from "@/api/topic/wrong";
+import { createTag, updateTag, deleteTag, getTag, getTagPage, exportTagExcel } from "@/api/topic/tag";
+import { createSubject, updateSubject, deleteSubject, getSubject, getSubjectPage, exportSubjectExcel,getSubjectAndKnowledge} from "@/api/topic/subject";
 
 export default {
   name: "Wrong",
@@ -185,15 +331,19 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 错题关联列表
+      // 选择题错题关联列表
       list: [],
+      //判断题错题列表
+      judgeList:[],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
+      //是否显示判断题
+      open1:false,
       //tabs标签
       activeName: 'first',
-      // 查询参数
+      // 选择题查询参数
       queryParams: {
         pageNo: 1,
         pageSize: 10,
@@ -205,8 +355,28 @@ export default {
         practiceCount: null,
         createTime: [],
       },
-      // 表单参数
+      // 判断题查询参数
+      queryParams2: {
+        pageNo: 1,
+        pageSize: 10,
+        topicId: null,
+        correctAnswer: null,
+        userId: null,
+        topicType: null,
+        summary: null,
+        practiceCount: null,
+        createTime: [],
+      },
+      // 选择表单参数
       form: {},
+      //判断表单数据
+      form2:{},
+      //标签
+      tags: {},
+      //课程和知识点的级联
+      subjectOne:[],
+      knowledgeTwo:{},
+
       // 表单校验
       rules: {
         topicId: [{ required: true, message: "题目编号不能为空", trigger: "blur" }],
@@ -220,9 +390,12 @@ export default {
   },
   created() {
     this.getList();
+    this.getTag();
+    this.getKnowledge();
+    this.getJudgeList();
   },
   methods: {
-    /** 查询列表 */
+    /** 查询选择题列表 */
     getList() {
       this.loading = true;
       // 执行查询
@@ -233,9 +406,55 @@ export default {
         this.loading = false;
       });
     },
+    /** 查询判断题题列表 */
+    getJudgeList() {
+      this.loading = true;
+      // 执行查询
+        // this.queryParams.topicType = 0
+      getWrongPage3(this.queryParams2).then(response => {
+        this.judgeList = response.data.list;
+        this.total = response.data.total;
+        this.loading = false;
+      });
+    },
+    getTag(){
+      var qeryParams = {
+        page:"1",
+        size:"20"
+      }
+      getTagPage(qeryParams).then(response=>{
+        this.tags = response.data.list;
+        console.log(this.tags)
+      })
+    },
+    /** 查询知识点**/
+    getKnowledge(){
+      getSubjectAndKnowledge().then(response=>{
+       // this.knowledge = response.data;
+        this.subjectOne = response.data;
+        console.log(this.subjectOne)
+      })
+
+    },
+    subjectLevelOneChanged(value){
+      console.log(value)
+      for(let i = 0; i < this.subjectOne.length;i++){
+        if(this.subjectOne[i].id === value){
+          this.knowledgeTwo = this.subjectOne[i].knowledgeDOList;
+          this.queryParams.knowledgeId = ""
+          this.form.knowledgeId = ""
+        }
+      }
+      console.log(this.knowledgeTwo)
+
+    },
+    bindSelectChange: function (e) {
+      this.form.tags = e;
+    },
+
     /** 取消按钮 */
     cancel() {
-      this.open = false;
+      this.open1 = false;
       this.reset();
     },
     /** 表单重置 */
@@ -261,6 +480,16 @@ export default {
       this.resetForm("queryForm");
       this.handleQuery();
     },
+    /** 搜索按钮操作 */
+    handleQuery2() {
+      this.queryParams2.pageNo = 1;
+      this.getJudgeList();
+    },
+    /** 重置按钮操作 */
+    resetQuery2() {
+      this.resetForm("queryForm2");
+      this.handleQuery2();
+    },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -274,7 +503,39 @@ export default {
       getWrong(id).then(response => {
 
         this.form = response.data;
+        this.form.tags = Number(response.data.tags)
+        this.form.difficulty = response.data.difficulty.toString()
+        //更新知识点框
+        for(let i = 0; i < this.subjectOne.length;i++){
+          if(this.subjectOne[i].id === response.data.subjectId){
+            this.knowledgeTwo = this.subjectOne[i].knowledgeDOList;
+            this.queryParams.knowledgeId = ""
+          }
+        }
+        this.form.knowledgeId = response.data.knowledgeId
         this.open = true;
+        this.title = "修改错题关联";
+      });
+    },
+
+    /** 修改按钮操作 */
+    handleJudgeUpdate(row) {
+      this.reset();
+      const id = row.id;
+      getJudgeWrong(id).then(response => {
+
+        this.form = response.data;
+        this.form.tags = Number(response.data.tags)
+        this.form.difficulty = response.data.difficulty.toString()
+        //更新知识点框
+        for(let i = 0; i < this.subjectOne.length;i++){
+          if(this.subjectOne[i].id === response.data.subjectId){
+            this.knowledgeTwo = this.subjectOne[i].knowledgeDOList;
+            this.queryParams.knowledgeId = ""
+          }
+        }
+        this.form.knowledgeId = response.data.knowledgeId
+        this.open1 = true;
         this.title = "修改错题关联";
       });
     },
@@ -286,6 +547,7 @@ export default {
         }
         // 修改的提交
         if (this.form.id != null) {
+          this.form.topicType = 0;
           updateWrong(this.form).then(response => {
             this.$modal.msgSuccess("修改成功");
             this.open = false;
@@ -301,13 +563,48 @@ export default {
         });
       });
     },
+    /** 提交判断题按钮 */
+    submitJudgeForm() {
+      this.$refs["form"].validate(valid => {
+        if (!valid) {
+          return;
+        }
+        // 修改的提交
+        if (this.form.id != null) {
+          this.form.topicType = 1;
+          updateWrong(this.form).then(response => {
+            this.$modal.msgSuccess("修改成功");
+            this.open1 = false;
+            this.getJudgeList();
+          });
+          return;
+        }
+        // 添加的提交
+        createWrong(this.form).then(response => {
+          this.$modal.msgSuccess("新增成功");
+          this.open1 = false;
+          this.getList();
+        });
+      });
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
       const id = row.id;
       this.$modal.confirm('是否确认删除错题?').then(function() {
         return deleteWrong(id);
       }).then(() => {
-        this.getList();
+        this.getJudgeList();
+        this.$modal.msgSuccess("删除成功");
+      }).catch(() => {});
+    },
+
+    /** 删除按钮操作 */
+    handleJudgeDelete(row) {
+      const id = row.id;
+      this.$modal.confirm('是否确认删除错题?').then(function() {
+        return deleteJudgeWrong(id);
+      }).then(() => {
+        this.getJudgeList();
         this.$modal.msgSuccess("删除成功");
       }).catch(() => {});
     },
@@ -328,6 +625,8 @@ export default {
     handleClick(tab, event) {
       //清空表单
      // this.form={}
+      //清空数据
+
       console.log(tab, event);
     }
   }
