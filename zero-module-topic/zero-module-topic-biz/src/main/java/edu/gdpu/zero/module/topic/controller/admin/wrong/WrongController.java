@@ -106,7 +106,7 @@ public class WrongController {
     }
 
     @GetMapping("/page2")
-    @Operation(summary = "获得错题关联分页")
+    @Operation(summary = "获得选择题错题关联分页")
     @PreAuthorize("@ss.hasPermission('topic:wrong:query')")
     public CommonResult<PageResult<WrongRespVO>> getWrongPage2(@Valid WrongPageReqVO pageVO) {
         PageResult<WrongRespVO> wrongPage2 = wrongService.getWrongPage2(pageVO);
@@ -114,11 +114,19 @@ public class WrongController {
     }
 
     @GetMapping("/page3")
-    @Operation(summary = "获得错题关联分页")
+    @Operation(summary = "获得判断题错题关联分页")
     @PreAuthorize("@ss.hasPermission('topic:wrong:query')")
     public CommonResult<PageResult<WrongJudgeRespVO>> getWrongPage3(@Valid WrongPageReqVO pageVO) {
         PageResult<WrongJudgeRespVO> judgeWrongPage = wrongService.getJudgeWrongPage(pageVO);
         return success(judgeWrongPage);
+    }
+
+    @GetMapping("/page4")
+    @Operation(summary = "获得问答题错题关联分页")
+    @PreAuthorize("@ss.hasPermission('topic:wrong:query')")
+    public CommonResult<PageResult<WrongInterRespVO>> getWrongPage4(@Valid WrongPageReqVO pageVO) {
+        PageResult<WrongInterRespVO> interWrongPage = wrongService.getInterWrongPage(pageVO);
+        return success(interWrongPage);
     }
 
     @GetMapping("/export-excel")

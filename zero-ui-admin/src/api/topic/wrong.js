@@ -77,6 +77,15 @@ export function getWrongPage3(query) {
   })
 }
 
+// 获得判断题错题关联分页
+export function getWrongPage4(query) {
+  return request({
+    url: '/topic/wrong/page4',
+    method: 'get',
+    params: query
+  })
+}
+
 // 导出错题关联 Excel
 export function exportWrongExcel(query) {
   return request({

@@ -387,6 +387,7 @@ public class WrongServiceImpl implements WrongService {
                 wrongJudgeRespVO.setTopicType(1L);
                 wrongJudgeRespVO.setSummary(wrongDO.getSummary());
                 wrongJudgeRespVO.setPracticeCount(wrongDO.getPracticeCount());
+                wrongJudgeRespVO.setCreateTime(wrongDO.getCreateTime());
 
                 //插入判断题数据
                 wrongJudgeRespVO.setJudgeName(judgmentDO.getName());
@@ -407,6 +408,60 @@ public class WrongServiceImpl implements WrongService {
                 PageResult<WrongJudgeRespVO> wrongJudgeRespVOPageResult = new PageResult<>(judgewrong, wrongDOPageResult.getTotal());
 
         return wrongJudgeRespVOPageResult;
+    }
+
+    @Override
+    public PageResult<WrongInterRespVO> getInterWrongPage(WrongPageReqVO pageReqVO) {
+
+        //获取当前登录人的id
+        pageReqVO.setUserId(getLoginUserId());
+        pageReqVO.setTopicType(2L);
+        //查出相关的错题
+        PageResult<WrongDO> wrongDOPageResult = wrongMapper.selectPage(pageReqVO);
+        //获取错题列表
+        List<WrongDO> list = wrongDOPageResult.getList();
+        //判断题错题集合
+        List<WrongInterRespVO> interwrong = new ArrayList<>();
+
+        //遍历结果，从选择题表查询数据
+        for(int i =0;i<list.size();i++) {
+            //获取错题数据
+            WrongDO wrongDO = list.get(i);
+            //新建判断题数据
+            WrongInterRespVO wrongInterRespVO = new WrongInterRespVO();
+
+            //获取错题表里的题目id查询判断题
+            Long topicId = wrongDO.getTopicId();
+            InterlocutionDO interlocutionDO = interlocutionMapper.selectById(topicId);
+            //插入错题数据
+            wrongInterRespVO.setId(wrongDO.getId());
+            wrongInterRespVO.setUserId(wrongDO.getUserId());
+            wrongInterRespVO.setTopicId(wrongDO.getTopicId());
+            wrongInterRespVO.setCorrectAnswer(wrongDO.getCorrectAnswer());
+            wrongInterRespVO.setTopicType(1L);
+            wrongInterRespVO.setSummary(wrongDO.getSummary());
+            wrongInterRespVO.setPracticeCount(wrongDO.getPracticeCount());
+            wrongInterRespVO.setCreateTime(wrongDO.getCreateTime());
+
+            //插入判断题数据
+            wrongInterRespVO.setInterName(interlocutionDO.getContent());
+            wrongInterRespVO.setInterAnswer(interlocutionDO.getAnswer());
+            wrongInterRespVO.setTags(interlocutionDO.getTags());
+            wrongInterRespVO.setSubjectId(interlocutionDO.getSubjectId());
+            wrongInterRespVO.setKnowledgeId(interlocutionDO.getKnowledgeId());
+            wrongInterRespVO.setDifficulty(interlocutionDO.getDifficulty());
+            wrongInterRespVO.setCommentId(interlocutionDO.getCommentId());
+
+
+            //翻译
+            wrongInterRespVO.setNameOfSubject(subjectMapper.selectById(interlocutionDO.getSubjectId()).getName());
+            wrongInterRespVO.setNameOfKnowledge(knowledgeMapper.selectById(interlocutionDO.getKnowledgeId()).getName());
+            wrongInterRespVO.setNameOfTags(tagMapper.selectById(Long.parseLong(interlocutionDO.getTags())).getName());
+            interwrong.add(i, wrongInterRespVO);
+        }
+        //返回结果
+        PageResult<WrongInterRespVO> wrongInterRespVOPageResult = new PageResult<>(interwrong, wrongDOPageResult.getTotal());
+        return wrongInterRespVOPageResult;
     }
 
     @Override

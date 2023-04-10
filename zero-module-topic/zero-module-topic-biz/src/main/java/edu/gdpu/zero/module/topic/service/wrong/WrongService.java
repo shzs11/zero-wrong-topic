@@ -100,6 +100,14 @@ public interface WrongService {
     PageResult<WrongJudgeRespVO> getJudgeWrongPage(WrongPageReqVO pageReqVO);
 
     /**
+     * 获得判断题错题
+     *
+     * @param pageReqVO 分页查询
+     * @return 错题关联分页
+     */
+    PageResult<WrongInterRespVO> getInterWrongPage(WrongPageReqVO pageReqVO);
+
+    /**
      * 获得错题关联列表, 用于 Excel 导出
      *
      * @param exportReqVO 查询条件
